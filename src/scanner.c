@@ -82,7 +82,9 @@ bool tree_sitter_newt_external_scanner_scan(State *state, TSLexer *lexer,
 
   int32_t cur = peek(state);
   uint32_t col = lexer->get_column(lexer);
-  if (ws && syms[VIRT_START]) {
+  // START must indent more
+  // We have `ws` so we make forward progress
+  if (ws && syms[VIRT_START] && cur < col) {
     fprintf(stderr, "start [%d %d %d %d] %d %d\n", syms[0], syms[1], syms[2],
             syms[3], col, cur);
     push(state, col);
@@ -90,7 +92,10 @@ bool tree_sitter_newt_external_scanner_scan(State *state, TSLexer *lexer,
     return true;
   }
   // if we are in a smaller column, we force virt_end
-  if (syms[VIRT_END]) {
+  // even if it's not expected (I think this is important)
+  // on the editor side there is a `then` expected vs outdented `then`, but
+  // maybe GLR can detect a "stray" END token?
+  if (syms[VIRT_END] || true) {
 
     if (col < cur) {
       fprintf(stderr, "end [%d %d %d %d] %d %d\n", syms[0], syms[1], syms[2],

@@ -1,32 +1,5 @@
 [
   {
-    "type": "appExpr",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "operator",
-          "named": true
-        },
-        {
-          "type": "strLit",
-          "named": true
-        },
-        {
-          "type": "typeExpr",
-          "named": true
-        },
-        {
-          "type": "varname",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "binder",
     "named": true,
     "fields": {},
@@ -60,10 +33,6 @@
         {
           "type": "typeExpr",
           "named": true
-        },
-        {
-          "type": "varname",
-          "named": true
         }
       ]
     }
@@ -84,7 +53,7 @@
     }
   },
   {
-    "type": "conDef",
+    "type": "classDecl",
     "named": true,
     "fields": {},
     "children": {
@@ -92,7 +61,43 @@
       "required": true,
       "types": [
         {
+          "type": "character",
+          "named": true
+        },
+        {
+          "type": "className",
+          "named": true
+        },
+        {
+          "type": "end",
+          "named": true
+        },
+        {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "recUpdate",
+          "named": true
+        },
+        {
+          "type": "semi",
+          "named": true
+        },
+        {
+          "type": "sigDecl",
+          "named": true
+        },
+        {
+          "type": "start",
+          "named": true
+        },
+        {
+          "type": "string",
           "named": true
         },
         {
@@ -111,19 +116,15 @@
       "required": true,
       "types": [
         {
-          "type": "conDef",
-          "named": true
-        },
-        {
           "type": "end",
           "named": true
         },
         {
-          "type": "identifier",
+          "type": "semi",
           "named": true
         },
         {
-          "type": "semi",
+          "type": "sigDecl",
           "named": true
         },
         {
@@ -146,11 +147,30 @@
       "required": true,
       "types": [
         {
-          "type": "appExpr",
+          "type": "lhs",
           "named": true
         },
         {
           "type": "typeExpr",
+          "named": true
+        },
+        {
+          "type": "whereClause",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "deriveDecl",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -165,19 +185,7 @@
       "required": true,
       "types": [
         {
-          "type": "caseAlt",
-          "named": true
-        },
-        {
-          "type": "end",
-          "named": true
-        },
-        {
-          "type": "semi",
-          "named": true
-        },
-        {
-          "type": "start",
+          "type": "orAlt",
           "named": true
         },
         {
@@ -235,19 +243,7 @@
       "required": true,
       "types": [
         {
-          "type": "caseAlt",
-          "named": true
-        },
-        {
-          "type": "end",
-          "named": true
-        },
-        {
-          "type": "semi",
-          "named": true
-        },
-        {
-          "type": "start",
+          "type": "orAlt",
           "named": true
         },
         {
@@ -273,6 +269,21 @@
           "type": "identifier",
           "named": true
         },
+        {
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "dollar",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
         {
           "type": "term",
           "named": true
@@ -330,6 +341,41 @@
     }
   },
   {
+    "type": "instanceDecl",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "defDecl",
+          "named": true
+        },
+        {
+          "type": "end",
+          "named": true
+        },
+        {
+          "type": "semi",
+          "named": true
+        },
+        {
+          "type": "sigDecl",
+          "named": true
+        },
+        {
+          "type": "start",
+          "named": true
+        },
+        {
+          "type": "typeExpr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "lamExpr",
     "named": true,
     "fields": {},
@@ -349,6 +395,60 @@
     }
   },
   {
+    "type": "lhs",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "character",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "recUpdate",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "typeExpr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "mixfixDecl",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "name",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "module",
     "named": true,
     "fields": {},
@@ -357,11 +457,19 @@
       "required": true,
       "types": [
         {
+          "type": "classDecl",
+          "named": true
+        },
+        {
           "type": "dataDecl",
           "named": true
         },
         {
           "type": "defDecl",
+          "named": true
+        },
+        {
+          "type": "deriveDecl",
           "named": true
         },
         {
@@ -373,11 +481,88 @@
           "named": true
         },
         {
+          "type": "instanceDecl",
+          "named": true
+        },
+        {
+          "type": "mixfixDecl",
+          "named": true
+        },
+        {
+          "type": "pfuncDecl",
+          "named": true
+        },
+        {
+          "type": "ptypeDecl",
+          "named": true
+        },
+        {
           "type": "semi",
           "named": true
         },
         {
+          "type": "shortDataDecl",
+          "named": true
+        },
+        {
           "type": "sigDecl",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "orAlt",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "caseAlt",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "pfuncDecl",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "jsLitString",
+          "named": true
+        },
+        {
+          "type": "typeExpr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "ptypeDecl",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "name",
+          "named": true
+        },
+        {
+          "type": "typeExpr",
           "named": true
         }
       ]
@@ -393,6 +578,60 @@
       "types": [
         {
           "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "recUpdate",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "shortDataDecl",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "character",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "recUpdate",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "typeExpr",
           "named": true
         }
       ]
@@ -442,11 +681,19 @@
       "required": true,
       "types": [
         {
-          "type": "appExpr",
+          "type": "character",
           "named": true
         },
         {
           "type": "doBlock",
+          "named": true
+        },
+        {
+          "type": "dollar",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         },
         {
@@ -455,6 +702,22 @@
         },
         {
           "type": "lamExpr",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "recUpdate",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "typeExpr",
           "named": true
         }
       ]
@@ -465,7 +728,7 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
@@ -479,20 +742,40 @@
         {
           "type": "term",
           "named": true
+        },
+        {
+          "type": "typeExpr",
+          "named": true
         }
       ]
     }
   },
   {
-    "type": "varname",
+    "type": "whereClause",
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
-          "type": "identifier",
+          "type": "defDecl",
+          "named": true
+        },
+        {
+          "type": "end",
+          "named": true
+        },
+        {
+          "type": "semi",
+          "named": true
+        },
+        {
+          "type": "sigDecl",
+          "named": true
+        },
+        {
+          "type": "start",
           "named": true
         }
       ]
@@ -500,6 +783,10 @@
   },
   {
     "type": "$",
+    "named": false
+  },
+  {
+    "type": "$=",
     "named": false
   },
   {
@@ -523,6 +810,14 @@
     "named": false
   },
   {
+    "type": ":=",
+    "named": false
+  },
+  {
+    "type": ";",
+    "named": false
+  },
+  {
     "type": "<-",
     "named": false
   },
@@ -535,8 +830,28 @@
     "named": false
   },
   {
+    "type": "[",
+    "named": false
+  },
+  {
     "type": "\\",
     "named": false
+  },
+  {
+    "type": "]",
+    "named": false
+  },
+  {
+    "type": "character",
+    "named": true
+  },
+  {
+    "type": "class",
+    "named": false
+  },
+  {
+    "type": "className",
+    "named": true
   },
   {
     "type": "comment",
@@ -544,7 +859,15 @@
     "extra": true
   },
   {
+    "type": "conName",
+    "named": false
+  },
+  {
     "type": "data",
+    "named": false
+  },
+  {
+    "type": "derive",
     "named": false
   },
   {
@@ -572,6 +895,22 @@
     "named": false
   },
   {
+    "type": "infixl",
+    "named": false
+  },
+  {
+    "type": "infixr",
+    "named": false
+  },
+  {
+    "type": "instance",
+    "named": false
+  },
+  {
+    "type": "jsLitString",
+    "named": true
+  },
+  {
     "type": "let",
     "named": false
   },
@@ -580,8 +919,28 @@
     "named": false
   },
   {
-    "type": "operator",
+    "type": "name",
     "named": true
+  },
+  {
+    "type": "name",
+    "named": false
+  },
+  {
+    "type": "number",
+    "named": true
+  },
+  {
+    "type": "pfunc",
+    "named": false
+  },
+  {
+    "type": "ptype",
+    "named": false
+  },
+  {
+    "type": "quantity",
+    "named": false
   },
   {
     "type": "semi",
@@ -592,11 +951,19 @@
     "named": true
   },
   {
-    "type": "strLit",
+    "type": "string",
     "named": true
   },
   {
     "type": "then",
+    "named": false
+  },
+  {
+    "type": "typeName",
+    "named": false
+  },
+  {
+    "type": "uses",
     "named": false
   },
   {

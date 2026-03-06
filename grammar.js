@@ -41,8 +41,8 @@ module.exports = grammar({
           seq("/-", /([^-]|-+[^/])-/, "/"),
         ),
       ),
-
-
+    _arr: ($) => choice("->", "→"),
+    number: $ => /\d+/,
     lamExpr: $ => seq(
       choice("\\", "λ"),
       repeat1($.identifier),
@@ -50,16 +50,19 @@ module.exports = grammar({
       $.typeExpr
     ),
     // hole, parenTypeExpression, record update
-    _atom: $ => choice($.varname, $.strLit, $.operator, seq("(", $.typeExpr, ")")),
-    _parg: $ => choice($._atom, seq("{{", $.typeExpr, "}}"), seq("{", $.typeExpr, "}")),
-    appExpr: $ => seq($._atom, repeat($._parg)),
+    _atom: $ => choice($.identifier, $.string, $.character, $.number, $.recUpdate, seq("(", $.typeExpr, ")")),
+    _parg: $ => choice(seq("{{", $.typeExpr, "}}"), seq("{", $.typeExpr, "}"), $._atom),
+    recUpdate: $ => seq("[", sep(";", seq($.identifier, choice(":=", "$="), $.term)), "]"),
+    _appExpr: $ => (seq($._atom, repeat($._parg))),
     qname: ($) => sep1(".", $.identifier),
-    strLit: $ => /"[^"]*"/,
-    doCaseLet: $ => seq("let", "(", $.term, ")", "=", $.typeExpr,
-      layout($, $._orAlt)),
+    string: $ => /"[^"]*"/,
+    character: $ => /'(\\)?.'/,
+    doCaseLet: $ => seq("let", "(", $.term, ")", "=", $.typeExpr, repeat($.orAlt)),
     caseAlt: $ => seq($.term, "=>", $.term),
-    _orAlt: $ => seq("|", $.caseAlt),
-    _doArrow: $ => seq("<-", $.typeExpr, optional(layout($, $._orAlt))),
+    orAlt: $ => seq("|", $.caseAlt),
+    // layout was causing trouble here. I kinda wanted to ditch it, but there
+    // could be a shift/reduce thing in the real parser
+    _doArrow: $ => seq("<-", $.typeExpr, repeat($.orAlt)),
     doArrow: $ => seq($.term, optional($._doArrow)),
     doLet: $ => seq("let", $.identifier, "=", $.term),
     _doExpr: $ => choice(
@@ -76,26 +79,26 @@ module.exports = grammar({
         $.lamExpr,
         $.doBlock,
         $.ifThen,
-        $.appExpr,
+        $._appExpr,
       ),
-    term: ($) => prec.right(seq($._term2, repeat(seq("$", $._term2)))),
-
-    // varname is ident|uident|_, but we'll gloss over that
-    varname: ($) => $.identifier,
-
+    // the "$" becomes operator and we get past the bit in main, but
+    // it's going to fail on a "$" \ ...
+    // why doesn't "$" work here?
+    dollar: $ => seq("$", $.term),
+    term: ($) => prec.right(seq($._term2, optional($.dollar))),
 
     // abind/ibind/ebind in Parser.newt
     binder: ($) =>
       choice(
-        seq("(", $.identifier, ":", $.typeExpr, ")"),
-        // seq("(", $.typeExpr, ")"),
+        // repeat($.identifier) has a conflict
+        seq("(", alias(optional("0"), "quantity"), $.identifier, ":", $.typeExpr, ")"),
         seq("{{", $.typeExpr, "}}"),
-        seq("{", $.identifier, ":", $.typeExpr, "}"),
+        seq("{", alias(optional("0"), "quantity"), repeat1($.identifier), ":", $.typeExpr, "}"),
       ),
-    _arr: ($) => choice("->", "→"),
+
     forall: ($) => seq("∀", repeat1($.identifier), ".", $.typeExpr),
-    binders: ($) => seq(choice($.varname, repeat1($.binder)), $._arr, $.typeExpr),
-    typeExpr: ($) => choice($.forall, $.binders, $.term),
+    binders: ($) => seq(choice(repeat1($.binder)), $._arr, $.typeExpr),
+    typeExpr: ($) => prec.right(choice($.forall, $.binders, seq($.term, optional(seq($._arr, $.typeExpr))))),
 
     // pitype: ($) =>
     //   seq(
@@ -104,37 +107,76 @@ module.exports = grammar({
     //     $.identifier,
     //   ),
     sigDecl: ($) => seq($.identifier, ":", $.typeExpr),
-    defDecl: ($) => seq($.appExpr, "=", $.typeExpr),
+    whereClause: $ => seq("where", layout($, choice($.sigDecl, $.defDecl))),
+    defDecl: ($) => seq(alias($._appExpr, $.lhs), "=", $.typeExpr, optional($.whereClause)),
+    shortDataDecl: $ => seq(
+      "data",
+      alias($.identifier, "typeName"),
+      repeat($.identifier),
+      "=",
+      sep1("|", seq(alias($.identifier, "conName"), repeat($._atom)))
+    ),
     dataDecl: ($) =>
       seq(
         "data",
-        $.identifier,
+        alias($.identifier, "typeName"),
         ":",
         $.typeExpr,
-        optional(seq("where", layout($, $.conDef))),
+        // the layout here can be empty (so no start tag)
+        // optional doesn't seem to help, so we have an error at void
+        optional(seq("where", optional(layout($, $.sigDecl)))),
       ),
+    jsLitString: $ => /`[^`]+`/,
+    deriveDecl: $ => seq("derive", repeat1($.identifier)),
+    pfuncDecl: ($) => seq(
+      "pfunc",
+      alias($.identifier, "name"),
+      optional(seq("uses", "(", repeat1($.identifier), ")")),
+      ":",
+      $.typeExpr,
+      ":=",
+      $.jsLitString
+    ),
+    ptypeDecl: $ => seq(
+      "ptype",
+      alias($.identifier, $.name),
+      optional(seq(":", $.typeExpr))
+    ),
     importDef: ($) => seq("import", $.qname),
-    conDef: ($) =>
+    mixfixDecl: $ => seq(
+      choice("infixr", "infixl"),
+      $.number,
+      repeat1(alias($.identifier, $.name))
+    ),
+    classDecl: $ =>
       seq(
-        $.identifier, // upper
-        ":",
-        $.typeExpr
+        "class",
+        seq(alias($.identifier, $.className), repeat($._atom)),
+        "where",
+        layout($, $.sigDecl)
       ),
+    instanceDecl: $ => seq(
+      "instance",
+      $.typeExpr,
+      "where",
+      layout($, choice($.sigDecl, $.defDecl))
+    ),
     _decl: ($) =>
       choice(
-        // mixfixDecl,
-        // ptypeDecl
-        // pfuncDecl
+        $.mixfixDecl,
+        $.ptypeDecl,
+        $.pfuncDecl,
         $.dataDecl,
-        // shortDataDecl
-        // classDecl
-        // instanceDecl
-        // recordDecl
-        // exportDecl
-        // deriveDecl
+        $.shortDataDecl,
+        $.classDecl,
+        $.instanceDecl,
+        // $.recordDecl,
+        // $.exportDecl,
+        $.deriveDecl,
         $.sigDecl,
         $.defDecl,
       ),
+    colon: _ => ":",
     module: ($) =>
       seq(
         "module",
@@ -142,8 +184,11 @@ module.exports = grammar({
         repeat(seq($.semi, $.importDef)),
         repeat(seq($.semi, $._decl)),
       ),
-    // these are _way_ more generous in newt
-    operator: ($) => /[!#$%&*+.,/<=>?@\\^|-]+/,
-    identifier: ($) => /[A-Za-z_][\w']*|[,]|\+\+/,
+    // oof, sort this out.
+    // operator: ($) => /xxxx[∘!#$%&*+,./<=>?@^|-]+/,
+    // Don't think we need this at this point.
+
+    // adding "," here does all sorts of harm...
+    identifier: ($) => /_,_|,|([^()\\{}\[\],.@;\s ])[^()\\{}\[\],.@;\s ]*/,
   },
 });
