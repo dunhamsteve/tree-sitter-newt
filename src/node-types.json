@@ -376,6 +376,21 @@
     }
   },
   {
+    "type": "jsLitString",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "jsStringFragment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "lamExpr",
     "named": true,
     "fields": {},
@@ -842,6 +857,10 @@
     "named": false
   },
   {
+    "type": "`",
+    "named": false
+  },
+  {
     "type": "character",
     "named": true
   },
@@ -907,7 +926,7 @@
     "named": false
   },
   {
-    "type": "jsLitString",
+    "type": "jsStringFragment",
     "named": true
   },
   {

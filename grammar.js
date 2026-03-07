@@ -126,7 +126,7 @@ module.exports = grammar({
         // optional doesn't seem to help, so we have an error at void
         optional(seq("where", optional(layout($, $.sigDecl)))),
       ),
-    jsLitString: $ => /`[^`]+`/,
+    jsLitString: $ => seq("`",alias(/[^`]+/,$.jsStringFragment),"`"),
     deriveDecl: $ => seq("derive", repeat1($.identifier)),
     pfuncDecl: ($) => seq(
       "pfunc",
