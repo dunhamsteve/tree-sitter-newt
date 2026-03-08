@@ -126,7 +126,7 @@ module.exports = grammar({
         // optional doesn't seem to help, so we have an error at void
         optional(seq("where", optional(layout($, $.sigDecl)))),
       ),
-    jsLitString: $ => seq("`",alias(/[^`]+/,$.jsStringFragment),"`"),
+    jsLitString: $ => seq("`", alias(/[^`]+/, $.jsStringFragment), "`"),
     deriveDecl: $ => seq("derive", repeat1($.identifier)),
     pfuncDecl: ($) => seq(
       "pfunc",
@@ -148,10 +148,18 @@ module.exports = grammar({
       $.number,
       repeat1(alias($.identifier, $.name))
     ),
+    _telescope: $ => choice($.identifier, $.binder),
+    recordDecl: $ =>
+      seq(
+        "record",
+        seq(alias($.identifier, $.recordName), optional($._telescope)),
+        "where",
+        layout($, choice(seq("constructor", $.identifier), $.sigDecl)),
+      ),
     classDecl: $ =>
       seq(
         "class",
-        seq(alias($.identifier, $.className), repeat($._atom)),
+        seq(alias($.identifier, $.className), optional($._telescope)),
         "where",
         layout($, $.sigDecl)
       ),
@@ -170,7 +178,7 @@ module.exports = grammar({
         $.shortDataDecl,
         $.classDecl,
         $.instanceDecl,
-        // $.recordDecl,
+        $.recordDecl,
         // $.exportDecl,
         $.deriveDecl,
         $.sigDecl,

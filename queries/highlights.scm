@@ -12,7 +12,7 @@
   "∀"  ; "forall"
   "import" 
   "uses"  "derive" 
-  "class"  "instance"  ;"record"  "constructor" 
+  "class"  "instance"  "record" "constructor"
   "if"  "then"  "else" 
   "|" "<-" "=>" "$" ":"
 ] @keyword

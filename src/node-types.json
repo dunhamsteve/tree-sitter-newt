@@ -61,7 +61,7 @@
       "required": true,
       "types": [
         {
-          "type": "character",
+          "type": "binder",
           "named": true
         },
         {
@@ -77,14 +77,6 @@
           "named": true
         },
         {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "recUpdate",
-          "named": true
-        },
-        {
           "type": "semi",
           "named": true
         },
@@ -94,14 +86,6 @@
         },
         {
           "type": "start",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "typeExpr",
           "named": true
         }
       ]
@@ -512,6 +496,10 @@
           "named": true
         },
         {
+          "type": "recordDecl",
+          "named": true
+        },
+        {
           "type": "semi",
           "named": true
         },
@@ -612,6 +600,45 @@
         },
         {
           "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "recordDecl",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binder",
+          "named": true
+        },
+        {
+          "type": "end",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "recordName",
+          "named": true
+        },
+        {
+          "type": "semi",
+          "named": true
+        },
+        {
+          "type": "sigDecl",
+          "named": true
+        },
+        {
+          "type": "start",
           "named": true
         }
       ]
@@ -882,6 +909,10 @@
     "named": false
   },
   {
+    "type": "constructor",
+    "named": false
+  },
+  {
     "type": "data",
     "named": false
   },
@@ -960,6 +991,14 @@
   {
     "type": "quantity",
     "named": false
+  },
+  {
+    "type": "record",
+    "named": false
+  },
+  {
+    "type": "recordName",
+    "named": true
   },
   {
     "type": "semi",
