@@ -41,40 +41,57 @@ module.exports = grammar({
           seq("/-", /([^-]|-+[^/])-/, "/"),
         ),
       ),
-    _arr: ($) => choice("->", "→"),
+    _arr: _ => choice("->", "→"),
     number: $ => /\d+/,
     lamExpr: $ => seq(
       choice("\\", "λ"),
       repeat1($.identifier),
       "=>",
-      $.typeExpr
+      $._typeExpr
     ),
     // hole, parenTypeExpression, record update
-    _atom: $ => choice($.identifier, $.string, $.character, $.number, $.recUpdate, seq("(", $.typeExpr, ")")),
-    _parg: $ => choice(seq("{{", $.typeExpr, "}}"), seq("{", $.typeExpr, "}"), $._atom),
+    _atom: $ => choice($.identifier, $.string, $.character, $.number, $.recUpdate, seq("(", $._typeExpr, ")")),
+    _parg: $ => choice(seq("{{", $._typeExpr, "}}"), seq("{", $._typeExpr, "}"), $._atom),
     recUpdate: $ => seq("[", sep(";", seq($.identifier, choice(":=", "$="), $.term)), "]"),
     _appExpr: $ => (seq($._atom, repeat($._parg))),
     qname: ($) => sep1(".", $.identifier),
-    string: $ => /"[^"]*"/,
-    character: $ => /'(\\)?.'/,
-    doCaseLet: $ => seq("let", "(", $.term, ")", "=", $.typeExpr, repeat($.orAlt)),
+    string: _ => /"[^"]*"/,
+    character: _ => /'(\\)?.'/,
+    doLet: $ => seq("let", $.identifier, "=", $._typeExpr),
+    doCaseLet: $ => seq("let", "(", $.term, ")", "=", $._typeExpr, repeat($.orAlt)),
     caseAlt: $ => seq($.term, "=>", $.term),
     orAlt: $ => seq("|", $.caseAlt),
     // layout was causing trouble here. I kinda wanted to ditch it, but there
     // could be a shift/reduce thing in the real parser
-    _doArrow: $ => seq("<-", $.typeExpr, repeat($.orAlt)),
+    _doArrow: $ => seq("<-", $._typeExpr, repeat($.orAlt)),
     doArrow: $ => seq($.term, optional($._doArrow)),
-    doLet: $ => seq("let", $.identifier, "=", $.term),
     _doExpr: $ => choice(
       $.doCaseLet,
       $.doLet,
       $.doArrow),
     doBlock: $ => seq("do", layout($, $._doExpr)),
     ifThen: ($) => seq("if", $.term, "then", $.term, "else", $.term),
+    caseExpr: $ => seq(
+      "case",
+      $._typeExpr,
+      "of",
+      layout($,$.caseAlt)
+    ),
+    caseLet: $ => seq(
+      // what do we do with "in" - it makes an end without a start...
+      "let", "(", $._typeExpr,")","=",repeat($.orAlt),"in"
+    ),
+    letAssign: $ => seq($.identifier, "=", $._typeExpr),
+    letStmt: $ => seq(
+      "let",
+      layout($,$.letAssign),
+      "in",
+      $._typeExpr),
     _term2: ($) =>
       choice(
-        // caseExpr
-        // caseLet
+        $.caseExpr,
+        $.caseLet,
+        $.letStmt,
         // caseLamExpr
         $.lamExpr,
         $.doBlock,
@@ -91,14 +108,14 @@ module.exports = grammar({
     binder: ($) =>
       choice(
         // repeat($.identifier) has a conflict
-        seq("(", alias(optional("0"), "quantity"), $.identifier, ":", $.typeExpr, ")"),
-        seq("{{", $.typeExpr, "}}"),
-        seq("{", alias(optional("0"), "quantity"), repeat1($.identifier), ":", $.typeExpr, "}"),
+        seq("(", alias(optional("0"), "quantity"), $.identifier, ":", $._typeExpr, ")"),
+        seq("{{", $._typeExpr, "}}"),
+        seq("{", alias(optional("0"), "quantity"), repeat1($.identifier), ":", $._typeExpr, "}"),
       ),
 
-    forall: ($) => seq("∀", repeat1($.identifier), ".", $.typeExpr),
-    binders: ($) => seq(choice(repeat1($.binder)), $._arr, $.typeExpr),
-    typeExpr: ($) => prec.right(choice($.forall, $.binders, seq($.term, optional(seq($._arr, $.typeExpr))))),
+    forall: ($) => seq(choice("∀", "forall"), repeat1($.identifier), ".", $._typeExpr),
+    binders: ($) => seq(choice(repeat1($.binder)), $._arr, $._typeExpr),
+    _typeExpr: ($) => prec.right(choice($.forall, $.binders, seq($.term, optional(seq($._arr, $._typeExpr))))),
 
     // pitype: ($) =>
     //   seq(
@@ -106,9 +123,9 @@ module.exports = grammar({
     //     repeat(seq(repeat1(choice($.identifier, $.binder)), $._arr)),
     //     $.identifier,
     //   ),
-    sigDecl: ($) => seq($.identifier, ":", $.typeExpr),
+    sigDecl: ($) => seq($.identifier, ":", $._typeExpr),
     whereClause: $ => seq("where", layout($, choice($.sigDecl, $.defDecl))),
-    defDecl: ($) => seq(alias($._appExpr, $.lhs), "=", $.typeExpr, optional($.whereClause)),
+    defDecl: ($) => seq(alias($._appExpr, $.lhs), "=", $._typeExpr, optional($.whereClause)),
     shortDataDecl: $ => seq(
       "data",
       alias($.identifier, "typeName"),
@@ -121,7 +138,7 @@ module.exports = grammar({
         "data",
         alias($.identifier, "typeName"),
         ":",
-        $.typeExpr,
+        $._typeExpr,
         // the layout here can be empty (so no start tag)
         // optional doesn't seem to help, so we have an error at void
         optional(seq("where", optional(layout($, $.sigDecl)))),
@@ -133,14 +150,14 @@ module.exports = grammar({
       alias($.identifier, "name"),
       optional(seq("uses", "(", repeat1($.identifier), ")")),
       ":",
-      $.typeExpr,
+      $._typeExpr,
       ":=",
       $.jsLitString
     ),
     ptypeDecl: $ => seq(
       "ptype",
       alias($.identifier, $.name),
-      optional(seq(":", $.typeExpr))
+      optional(seq(":", $._typeExpr))
     ),
     importDef: ($) => seq("import", $.qname),
     mixfixDecl: $ => seq(
@@ -165,7 +182,7 @@ module.exports = grammar({
       ),
     instanceDecl: $ => seq(
       "instance",
-      $.typeExpr,
+      $._typeExpr,
       "where",
       layout($, choice($.sigDecl, $.defDecl))
     ),

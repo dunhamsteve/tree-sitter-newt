@@ -53,6 +53,13 @@ static int32_t peek(State *state) {
 #define PEEK lexer->lookahead
 #define PEEK_WS (PEEK == ' ' || PEEK == '\n' || PEEK == '\t')
 
+static bool isAtIn(TSLexer *lexer) {
+    if (PEEK != 'i') return false;
+    lexer->mark_end(lexer);
+    lexer->advance(lexer, false);
+    return PEEK == 'n';
+}
+
 /**
  * The custom scanner is responsible for the virtual indent, outdent, and semi tokens.
  * Additionally it handles whitespace. This allows us to give the virtual tokens priority over
@@ -95,15 +102,12 @@ bool tree_sitter_newt_external_scanner_scan(State *state, TSLexer *lexer,
   // even if it's not expected (I think this is important)
   // on the editor side there is a `then` expected vs outdented `then`, but
   // maybe GLR can detect a "stray" END token?
-  if (syms[VIRT_END] || true) {
-
-    if (col < cur) {
-      fprintf(stderr, "end [%d %d %d %d] %d %d\n", syms[0], syms[1], syms[2],
-              syms[3], col, cur);
-      pop(state);
-      lexer->result_symbol = VIRT_END;
-      return true;
-    }
+  if (ws && (col < cur || PEEK == '|' || isAtIn(lexer))) {
+    fprintf(stderr, "end [%d %d %d %d] %d %d\n", syms[0], syms[1], syms[2],
+            syms[3], col, cur);
+    pop(state);
+    lexer->result_symbol = VIRT_END;
+    return true;
   }
   // but we can't do that for semi?
   if (syms[VIRT_SEMI]) {

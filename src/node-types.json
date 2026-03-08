@@ -8,11 +8,19 @@
       "required": true,
       "types": [
         {
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "forall",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
         {
-          "type": "typeExpr",
+          "type": "term",
           "named": true
         }
       ]
@@ -31,7 +39,15 @@
           "named": true
         },
         {
-          "type": "typeExpr",
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "forall",
+          "named": true
+        },
+        {
+          "type": "term",
           "named": true
         }
       ]
@@ -45,6 +61,72 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "caseExpr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "caseAlt",
+          "named": true
+        },
+        {
+          "type": "end",
+          "named": true
+        },
+        {
+          "type": "forall",
+          "named": true
+        },
+        {
+          "type": "semi",
+          "named": true
+        },
+        {
+          "type": "start",
+          "named": true
+        },
+        {
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "caseLet",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "forall",
+          "named": true
+        },
+        {
+          "type": "orAlt",
+          "named": true
+        },
         {
           "type": "term",
           "named": true
@@ -100,7 +182,15 @@
       "required": true,
       "types": [
         {
+          "type": "binders",
+          "named": true
+        },
+        {
           "type": "end",
+          "named": true
+        },
+        {
+          "type": "forall",
           "named": true
         },
         {
@@ -116,7 +206,7 @@
           "named": true
         },
         {
-          "type": "typeExpr",
+          "type": "term",
           "named": true
         }
       ]
@@ -131,11 +221,19 @@
       "required": true,
       "types": [
         {
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "forall",
+          "named": true
+        },
+        {
           "type": "lhs",
           "named": true
         },
         {
-          "type": "typeExpr",
+          "type": "term",
           "named": true
         },
         {
@@ -169,15 +267,19 @@
       "required": true,
       "types": [
         {
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "forall",
+          "named": true
+        },
+        {
           "type": "orAlt",
           "named": true
         },
         {
           "type": "term",
-          "named": true
-        },
-        {
-          "type": "typeExpr",
           "named": true
         }
       ]
@@ -227,15 +329,19 @@
       "required": true,
       "types": [
         {
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "forall",
+          "named": true
+        },
+        {
           "type": "orAlt",
           "named": true
         },
         {
           "type": "term",
-          "named": true
-        },
-        {
-          "type": "typeExpr",
           "named": true
         }
       ]
@@ -249,6 +355,14 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "forall",
+          "named": true
+        },
         {
           "type": "identifier",
           "named": true
@@ -284,11 +398,19 @@
       "required": true,
       "types": [
         {
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "forall",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
         {
-          "type": "typeExpr",
+          "type": "term",
           "named": true
         }
       ]
@@ -333,11 +455,19 @@
       "required": true,
       "types": [
         {
+          "type": "binders",
+          "named": true
+        },
+        {
           "type": "defDecl",
           "named": true
         },
         {
           "type": "end",
+          "named": true
+        },
+        {
+          "type": "forall",
           "named": true
         },
         {
@@ -353,7 +483,7 @@
           "named": true
         },
         {
-          "type": "typeExpr",
+          "type": "term",
           "named": true
         }
       ]
@@ -383,11 +513,85 @@
       "required": true,
       "types": [
         {
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "forall",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
         {
-          "type": "typeExpr",
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "letAssign",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "forall",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "letStmt",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "end",
+          "named": true
+        },
+        {
+          "type": "forall",
+          "named": true
+        },
+        {
+          "type": "letAssign",
+          "named": true
+        },
+        {
+          "type": "semi",
+          "named": true
+        },
+        {
+          "type": "start",
+          "named": true
+        },
+        {
+          "type": "term",
           "named": true
         }
       ]
@@ -402,7 +606,15 @@
       "required": true,
       "types": [
         {
+          "type": "binders",
+          "named": true
+        },
+        {
           "type": "character",
+          "named": true
+        },
+        {
+          "type": "forall",
           "named": true
         },
         {
@@ -422,7 +634,7 @@
           "named": true
         },
         {
-          "type": "typeExpr",
+          "type": "term",
           "named": true
         }
       ]
@@ -538,6 +750,14 @@
       "required": true,
       "types": [
         {
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "forall",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
@@ -546,7 +766,7 @@
           "named": true
         },
         {
-          "type": "typeExpr",
+          "type": "term",
           "named": true
         }
       ]
@@ -561,11 +781,19 @@
       "required": true,
       "types": [
         {
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "forall",
+          "named": true
+        },
+        {
           "type": "name",
           "named": true
         },
         {
-          "type": "typeExpr",
+          "type": "term",
           "named": true
         }
       ]
@@ -653,7 +881,15 @@
       "required": false,
       "types": [
         {
+          "type": "binders",
+          "named": true
+        },
+        {
           "type": "character",
+          "named": true
+        },
+        {
+          "type": "forall",
           "named": true
         },
         {
@@ -673,7 +909,7 @@
           "named": true
         },
         {
-          "type": "typeExpr",
+          "type": "term",
           "named": true
         }
       ]
@@ -688,11 +924,19 @@
       "required": true,
       "types": [
         {
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "forall",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
         {
-          "type": "typeExpr",
+          "type": "term",
           "named": true
         }
       ]
@@ -723,6 +967,18 @@
       "required": true,
       "types": [
         {
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "caseExpr",
+          "named": true
+        },
+        {
+          "type": "caseLet",
+          "named": true
+        },
+        {
           "type": "character",
           "named": true
         },
@@ -732,6 +988,10 @@
         },
         {
           "type": "dollar",
+          "named": true
+        },
+        {
+          "type": "forall",
           "named": true
         },
         {
@@ -747,6 +1007,10 @@
           "named": true
         },
         {
+          "type": "letStmt",
+          "named": true
+        },
+        {
           "type": "number",
           "named": true
         },
@@ -759,34 +1023,7 @@
           "named": true
         },
         {
-          "type": "typeExpr",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "typeExpr",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "binders",
-          "named": true
-        },
-        {
-          "type": "forall",
-          "named": true
-        },
-        {
           "type": "term",
-          "named": true
-        },
-        {
-          "type": "typeExpr",
           "named": true
         }
       ]
@@ -888,6 +1125,10 @@
     "named": false
   },
   {
+    "type": "case",
+    "named": false
+  },
+  {
     "type": "character",
     "named": true
   },
@@ -933,6 +1174,10 @@
     "named": true
   },
   {
+    "type": "forall",
+    "named": false
+  },
+  {
     "type": "identifier",
     "named": true
   },
@@ -942,6 +1187,10 @@
   },
   {
     "type": "import",
+    "named": false
+  },
+  {
+    "type": "in",
     "named": false
   },
   {
@@ -979,6 +1228,10 @@
   {
     "type": "number",
     "named": true
+  },
+  {
+    "type": "of",
+    "named": false
   },
   {
     "type": "pfunc",
