@@ -21,9 +21,7 @@ const layout = (
   /** @type {GrammarSymbols<any>} */ $,
   /** @type {RuleOrLiteral} */ rule,
 ) => seq($.start, repeat(seq($.semi, rule)), $.end)
-// choice(
-//   seq("{", optional(sep1(";", rule)), "}"),
-// );
+
 
 module.exports = grammar({
   name: "newt",
@@ -50,15 +48,21 @@ module.exports = grammar({
       $._typeExpr
     ),
     // hole, parenTypeExpression, record update
-    _atom: $ => choice($.identifier, $.string, $.character, $.number, $.recUpdate, seq("(", $._typeExpr, ")")),
+    proj: $ => /[.][A-z0-9]/,
+    _atom: $ => choice(seq($.identifier,optional(seq("@","(",$._typeExpr,")"))), $.proj, $.string, $.character, $.number, $.recUpdate, seq("(", $._typeExpr, ")")),
     _parg: $ => choice(seq("{{", $._typeExpr, "}}"), seq("{", $._typeExpr, "}"), $._atom),
     recUpdate: $ => seq("[", sep(";", seq($.identifier, choice(":=", "$="), $.term)), "]"),
-    _appExpr: $ => (seq($._atom, repeat($._parg))),
+    _appExpr: $ => seq($._atom, repeat($._parg)),
     qname: ($) => sep1(".", $.identifier),
-    string: _ => /"[^"]*"/,
+    // TODO handle string interpolation, we'd need heavy lifting from the scanner
+    // This should be close enough for interps with no strings inside
+    string: _ => /"([^"]|\\.)*"/,
     character: _ => /'(\\)?.'/,
-    doLet: $ => seq("let", $.identifier, "=", $._typeExpr),
-    doCaseLet: $ => seq("let", "(", $.term, ")", "=", $._typeExpr, repeat($.orAlt)),
+    // This is unfortunate, we have a conflict with `let` and the $.start pushes it over the other way if we don't have one here.
+    // It will break `let x = case y of ...` when the ... is indented less than the x.  Unless I relax end..
+    doLet: $ => seq("let", seq($.start, repeat(seq($.semi, $.letAssign)), $.end)),
+    doCaseLet: $ => seq("let", $.start, $.semi, "(", $.term, ")", "=", $._typeExpr,
+      choice(seq($.end, repeat($.orAlt)), seq(repeat($.orAlt), $.end))),
     caseAlt: $ => seq($.term, "=>", $.term),
     orAlt: $ => seq("|", $.caseAlt),
     // layout was causing trouble here. I kinda wanted to ditch it, but there
@@ -68,7 +72,8 @@ module.exports = grammar({
     _doExpr: $ => choice(
       $.doCaseLet,
       $.doLet,
-      $.doArrow),
+      $.doArrow
+    ),
     doBlock: $ => seq("do", layout($, $._doExpr)),
     ifThen: ($) => seq("if", $.term, "then", $.term, "else", $.term),
     caseExpr: $ => seq(
@@ -79,7 +84,7 @@ module.exports = grammar({
     ),
     caseLet: $ => seq(
       // what do we do with "in" - it makes an end without a start...
-      "let", "(", $._typeExpr,")","=",repeat($.orAlt),"in"
+      "let", "(", $._typeExpr,")","=",$._typeExpr, repeat($.orAlt),"in"
     ),
     letAssign: $ => seq($.identifier, "=", $._typeExpr),
     letStmt: $ => seq(
@@ -123,6 +128,7 @@ module.exports = grammar({
     //     repeat(seq(repeat1(choice($.identifier, $.binder)), $._arr)),
     //     $.identifier,
     //   ),
+    aliasDecl: ($) => seq("alias", $.identifier, $._telescope, "=", $._typeExpr),
     sigDecl: ($) => seq($.identifier, ":", $._typeExpr),
     whereClause: $ => seq("where", layout($, choice($.sigDecl, $.defDecl))),
     defDecl: ($) => seq(alias($._appExpr, $.lhs), "=", $._typeExpr, optional($.whereClause)),
@@ -194,6 +200,7 @@ module.exports = grammar({
         $.dataDecl,
         $.shortDataDecl,
         $.classDecl,
+        $.aliasDecl,
         $.instanceDecl,
         $.recordDecl,
         // $.exportDecl,
@@ -204,6 +211,7 @@ module.exports = grammar({
     colon: _ => ":",
     module: ($) =>
       seq(
+        optional($.semi),
         "module",
         $.identifier,
         repeat(seq($.semi, $.importDef)),

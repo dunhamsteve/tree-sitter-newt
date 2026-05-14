@@ -8,7 +8,8 @@
   "do"
   "ptype"  "pfunc"
   "module"
-  ; "infixl"  "infixr"  "infix"
+  "infixl"  "infixr" ; "infix"
+  "alias"
   "∀"  "forall"
   "import"
   "uses"  "derive"
@@ -18,4 +19,4 @@
 ] @keyword
 (comment) @comment
 (string) @string
-(jsLitString) @string
+;(jsLitString) @string

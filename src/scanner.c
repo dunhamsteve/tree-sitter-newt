@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 
+// TODO where needs to end an indent? how many?
+
 // not available in wasm
 // lexer->log(...) is documented upstream, but is not in parser.h
 #define fprintf(...) //
@@ -57,7 +59,9 @@ static bool isAtIn(TSLexer *lexer) {
     if (PEEK != 'i') return false;
     lexer->mark_end(lexer);
     lexer->advance(lexer, false);
-    return PEEK == 'n';
+    if (PEEK != 'n') return false;
+    lexer->advance(lexer, false);
+    return PEEK == ' ' || PEEK == '\n';
 }
 
 /**
@@ -78,7 +82,7 @@ bool tree_sitter_newt_external_scanner_scan(State *state, TSLexer *lexer,
   }
 
   // Might have to deal with comments in here.
-  if (PEEK == '-' || PEEK == '{') {
+  if (PEEK == '-' || PEEK == '/') {
     if (syms[WHITESPACE] && ws) {
         lexer->result_symbol = WHITESPACE;
         return true;
@@ -99,25 +103,29 @@ bool tree_sitter_newt_external_scanner_scan(State *state, TSLexer *lexer,
     return true;
   }
   // if we are in a smaller column, we force virt_end
-  // even if it's not expected (I think this is important)
-  // on the editor side there is a `then` expected vs outdented `then`, but
-  // maybe GLR can detect a "stray" END token?
-  if (ws && (col < cur || PEEK == '|' || isAtIn(lexer))) {
+  // even if it's not expected, no WS check, we might have more than one of these,
+  // the stack keeps us from emitting too many
+  //
+  // Also, "in" gives us an end, if we're in a position to accept one.
+  // We may need to pop a few levels and when we are able to accept an "in"
+  // we won't be accepting a VIRT_END
+  if ((col < cur || isAtIn(lexer)) && syms[VIRT_END]) {
     fprintf(stderr, "end [%d %d %d %d] %d %d\n", syms[0], syms[1], syms[2],
             syms[3], col, cur);
     pop(state);
     lexer->result_symbol = VIRT_END;
     return true;
   }
-  // but we can't do that for semi?
-  if (syms[VIRT_SEMI]) {
+
+  // we only want one per customer, but there seem to cases with !ws
+  if (syms[VIRT_SEMI] || ws) {
     // FIXME - not eof, but we are requiring one at end of file at the moment.
     if (!lexer->eof(lexer) && col == cur) {
       lexer->result_symbol = VIRT_SEMI;
       fprintf(stderr, "semi [%d %d %d %d] %d %d\n", syms[0], syms[1], syms[2],
               syms[3], col, cur);
       return true;
-    } else {
+    } else if (syms[VIRT_SEMI]) {
       fprintf(stderr, "not semi [%d %d %d %d] %d %d\n", syms[0], syms[1],
               syms[2], syms[3], col, cur);
     }

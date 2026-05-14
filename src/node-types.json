@@ -1,5 +1,36 @@
 [
   {
+    "type": "aliasDecl",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binder",
+          "named": true
+        },
+        {
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "forall",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "binder",
     "named": true,
     "fields": {},
@@ -333,11 +364,23 @@
           "named": true
         },
         {
+          "type": "end",
+          "named": true
+        },
+        {
           "type": "forall",
           "named": true
         },
         {
           "type": "orAlt",
+          "named": true
+        },
+        {
+          "type": "semi",
+          "named": true
+        },
+        {
+          "type": "start",
           "named": true
         },
         {
@@ -356,19 +399,19 @@
       "required": true,
       "types": [
         {
-          "type": "binders",
+          "type": "end",
           "named": true
         },
         {
-          "type": "forall",
+          "type": "letAssign",
           "named": true
         },
         {
-          "type": "identifier",
+          "type": "semi",
           "named": true
         },
         {
-          "type": "term",
+          "type": "start",
           "named": true
         }
       ]
@@ -626,6 +669,10 @@
           "named": true
         },
         {
+          "type": "proj",
+          "named": true
+        },
+        {
           "type": "recUpdate",
           "named": true
         },
@@ -667,6 +714,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "aliasDecl",
+          "named": true
+        },
         {
           "type": "classDecl",
           "named": true
@@ -901,6 +952,10 @@
           "named": true
         },
         {
+          "type": "proj",
+          "named": true
+        },
+        {
           "type": "recUpdate",
           "named": true
         },
@@ -1015,6 +1070,10 @@
           "named": true
         },
         {
+          "type": "proj",
+          "named": true
+        },
+        {
           "type": "recUpdate",
           "named": true
         },
@@ -1109,6 +1168,10 @@
     "named": false
   },
   {
+    "type": "@",
+    "named": false
+  },
+  {
     "type": "[",
     "named": false
   },
@@ -1122,6 +1185,10 @@
   },
   {
     "type": "`",
+    "named": false
+  },
+  {
+    "type": "alias",
     "named": false
   },
   {
@@ -1236,6 +1303,10 @@
   {
     "type": "pfunc",
     "named": false
+  },
+  {
+    "type": "proj",
+    "named": true
   },
   {
     "type": "ptype",

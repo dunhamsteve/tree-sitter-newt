@@ -9,11 +9,12 @@
       "file-types": [
         "newt"
       ],
+  "highlights": "queries/highlights.scm",
+  "injections": "queries/injections.scm",
       "injection-regex": "^newt$",
       "class-name": "TreeSitterNewt"
     }
   ],
-  "highlights": "queries/highlights.scm",
   "metadata": {
     "version": "0.1.0",
     "license": "MIT",
