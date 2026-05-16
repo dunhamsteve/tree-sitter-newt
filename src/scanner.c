@@ -119,9 +119,9 @@ bool tree_sitter_newt_external_scanner_scan(State *state, TSLexer *lexer,
     return true;
   }
 
-  // we only want one per customer, but there seem to cases with !ws
-  if (syms[VIRT_SEMI] ) {
-    // FIXME - not eof, but we are requiring one at end of file at the moment.
+  // If we're not expecting semi, it picks up things like `| ...` at the moment.
+  // e.g. `|| ws && col == cur` (without ws, we get two semi at the beginning)
+  if (syms[VIRT_SEMI]) {
     if (!lexer->eof(lexer) && col == cur) {
       lexer->result_symbol = VIRT_SEMI;
       fprintf(stderr, "semi [%d %d %d %d] %d %d\n", syms[0], syms[1], syms[2],

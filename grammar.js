@@ -23,10 +23,24 @@ const layout = (
 ) => seq($.start, repeat(seq($.semi, rule)), $.end)
 
 
+// *** LSP.newt line 182 is treating where as an identifier
+
 module.exports = grammar({
   name: "newt",
   word: ($) => $.identifier,
   extras: ($) => [$.comment, $._ws],
+  reserved: {
+    // I needed this for `where`, which was being treated as identifier
+    global: $ => [
+      "where",
+      "in",
+      "case",
+      "instance",
+      "record",
+      "class",
+      "data",
+    ],
+  },
   externals: ($) => [$.start, $.semi, $.end, $._ws],
   rules: {
     // TODO: add the actual grammar rules
@@ -56,7 +70,7 @@ module.exports = grammar({
       $._typeExpr
     ),
     // hole, parenTypeExpression, record update
-    proj: $ => /[.][A-z0-9]/,
+    proj: $ => /[.][A-z0-9]+/,
     _atom: $ => choice(seq($.identifier, optional(seq("@", "(", $._typeExpr, ")"))), $.proj, $.string, $.character, $.number, $.recUpdate, $.listLiteral, seq("(", optional($._typeExpr), ")")),
     _parg: $ => choice(seq("{{", $._typeExpr, "}}"), seq("{", $._typeExpr, "}"), $._atom),
     recUpdate: $ => seq("{", sep(";", seq($.identifier, choice(":=", "$="), $.term)), "}"),
@@ -115,17 +129,13 @@ module.exports = grammar({
         $.ifThen,
         $._appExpr,
       ),
-    // the "$" becomes operator and we get past the bit in main, but
-    // it's going to fail on a "$" \ ...
-    // why doesn't "$" work here?
-    dollar: $ => seq("$", $.term),
-    term: ($) => prec.right(seq($._term2, optional($.dollar))),
-
+    term: ($) => prec.right(seq($._term2, repeat(seq("$", $._term2)))),
     // abind/ibind/ebind in Parser.newt
     binder: ($) =>
       choice(
         // repeat($.identifier) has a conflict
-        seq("(", alias(optional("0"), "quantity"), $.identifier, ":", $._typeExpr, ")"),
+        // having an optional 0 quantity breaks (0,blah)
+        seq("(", $.identifier, ":", $._typeExpr, ")"),
         seq("{{", $._typeExpr, "}}"),
         seq("{", alias(optional("0"), "quantity"), repeat1($.identifier), ":", $._typeExpr, "}"),
       ),
@@ -133,16 +143,10 @@ module.exports = grammar({
     forall: ($) => seq(choice("∀", "forall"), repeat1($.identifier), ".", $._typeExpr),
     binders: ($) => seq(choice(repeat1($.binder)), $._arr, $._typeExpr),
     _typeExpr: ($) => prec.right(choice($.forall, $.binders, seq($.term, optional(seq($._arr, $._typeExpr))))),
-
-    // pitype: ($) =>
-    //   seq(
-    //     optional($.forall),
-    //     repeat(seq(repeat1(choice($.identifier, $.binder)), $._arr)),
-    //     $.identifier,
-    //   ),
     aliasDecl: ($) => seq("alias", $.identifier, repeat($._telescope), "=", $._typeExpr),
     sigDecl: ($) => seq($.identifier, ":", $._typeExpr),
-    whereClause: $ => seq("where", layout($, choice($.sigDecl, $.defDecl))),
+    _where: $ => "where",
+    whereClause: $ => seq($._where, layout($, choice($.sigDecl, $.defDecl))),
     // impossible clauses don't have `=`
     defDecl: ($) => seq(alias($._appExpr, $.lhs), optional(seq("=", $._typeExpr)), optional($.whereClause)),
     shortDataDecl: $ => seq(

@@ -438,21 +438,6 @@
     }
   },
   {
-    "type": "dollar",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "term",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "forall",
     "named": true,
     "fields": {},
@@ -1117,10 +1102,6 @@
         },
         {
           "type": "doBlock",
-          "named": true
-        },
-        {
-          "type": "dollar",
           "named": true
         },
         {

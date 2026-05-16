@@ -17,15 +17,13 @@ blah = setMetaContext $ {metas $= updateMap ix me; autos := autos} mc
         (identifier))
       (term
         (identifier)
-        (dollar
+        (recUpdate
+          (identifier)
           (term
-            (recUpdate
-              (identifier)
-              (term
-                (identifier)
-                (identifier)
-                (identifier))
-              (identifier)
-              (term
-                (identifier)))
-            (identifier)))))))
+            (identifier)
+            (identifier)
+            (identifier))
+          (identifier)
+          (term
+            (identifier)))
+        (identifier)))))

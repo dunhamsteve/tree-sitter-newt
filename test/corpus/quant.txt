@@ -1,0 +1,58 @@
+===
+Pairs starting with 0
+===
+module Foo
+
+best : Int -> Int -> Doc -> List Item
+best = (0,w)
+best w k x = fromMaybe Nil $ be False Lin w k ((0,x) :: Nil)
+---
+
+(source_file
+  (module
+    (semi)
+    (qname
+      (identifier))
+    (semi)
+    (sigDecl
+      (identifier)
+      (term
+        (identifier))
+      (term
+        (identifier))
+      (term
+        (identifier))
+      (term
+        (identifier)
+        (identifier)))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier))
+      (term
+        (term
+          (number)
+          (identifier)
+          (identifier))))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier))
+      (term
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier)
+        (term
+          (term
+            (number)
+            (identifier)
+            (identifier))
+          (identifier)
+          (identifier))))))

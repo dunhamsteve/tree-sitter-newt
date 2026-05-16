@@ -148,7 +148,7 @@
     },
     "proj": {
       "type": "PATTERN",
-      "value": "[.][A-z0-9]"
+      "value": "[.][A-z0-9]+"
     },
     "_atom": {
       "type": "CHOICE",
@@ -952,19 +952,6 @@
         }
       ]
     },
-    "dollar": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "$"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "term"
-        }
-      ]
-    },
     "term": {
       "type": "PREC_RIGHT",
       "value": 0,
@@ -976,16 +963,20 @@
             "name": "_term2"
           },
           {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "dollar"
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
+            "type": "REPEAT",
+            "content": {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "$"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_term2"
+                }
+              ]
+            }
           }
         ]
       }
@@ -999,23 +990,6 @@
             {
               "type": "STRING",
               "value": "("
-            },
-            {
-              "type": "ALIAS",
-              "content": {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "STRING",
-                    "value": "0"
-                  },
-                  {
-                    "type": "BLANK"
-                  }
-                ]
-              },
-              "named": false,
-              "value": "quantity"
             },
             {
               "type": "SYMBOL",
@@ -1249,12 +1223,16 @@
         }
       ]
     },
+    "_where": {
+      "type": "STRING",
+      "value": "where"
+    },
     "whereClause": {
       "type": "SEQ",
       "members": [
         {
-          "type": "STRING",
-          "value": "where"
+          "type": "SYMBOL",
+          "name": "_where"
         },
         {
           "type": "SEQ",
@@ -2064,5 +2042,36 @@
   ],
   "inline": [],
   "supertypes": [],
-  "reserved": {}
+  "reserved": {
+    "global": [
+      {
+        "type": "STRING",
+        "value": "where"
+      },
+      {
+        "type": "STRING",
+        "value": "in"
+      },
+      {
+        "type": "STRING",
+        "value": "case"
+      },
+      {
+        "type": "STRING",
+        "value": "instance"
+      },
+      {
+        "type": "STRING",
+        "value": "record"
+      },
+      {
+        "type": "STRING",
+        "value": "class"
+      },
+      {
+        "type": "STRING",
+        "value": "data"
+      }
+    ]
+  }
 }
