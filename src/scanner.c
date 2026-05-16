@@ -55,7 +55,9 @@ static int32_t peek(State *state) {
 #define PEEK lexer->lookahead
 #define PEEK_WS (PEEK == ' ' || PEEK == '\n' || PEEK == '\t')
 
-static bool isAtIn(TSLexer *lexer) {
+// we can't do this for `where`, but for `in` or `(`, if we're expecting END, they can't be legit.
+static bool isAtInOrParen(TSLexer *lexer) {
+    if (PEEK == ')') return true;
     if (PEEK != 'i') return false;
     lexer->mark_end(lexer);
     lexer->advance(lexer, false);
@@ -109,7 +111,7 @@ bool tree_sitter_newt_external_scanner_scan(State *state, TSLexer *lexer,
   // Also, "in" gives us an end, if we're in a position to accept one.
   // We may need to pop a few levels and when we are able to accept an "in"
   // we won't be accepting a VIRT_END
-  if (col < cur || (lexer->eof(lexer) || isAtIn(lexer)) && syms[VIRT_END] && state->len > 1) {
+  if (col < cur || (lexer->eof(lexer) || isAtInOrParen(lexer)) && syms[VIRT_END] && state->len > 1) {
     fprintf(stderr, "end [%d %d %d %d] %d %d\n", syms[0], syms[1], syms[2],
             syms[3], col, cur);
     pop(state);
@@ -118,7 +120,7 @@ bool tree_sitter_newt_external_scanner_scan(State *state, TSLexer *lexer,
   }
 
   // we only want one per customer, but there seem to cases with !ws
-  if (syms[VIRT_SEMI] || ws) {
+  if (syms[VIRT_SEMI] ) {
     // FIXME - not eof, but we are requiring one at end of file at the moment.
     if (!lexer->eof(lexer) && col == cur) {
       lexer->result_symbol = VIRT_SEMI;

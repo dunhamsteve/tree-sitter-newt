@@ -1,0 +1,33 @@
+======
+Records
+======
+module  Test
+
+record Foo a where
+  constructor Blah
+  foo : ∀ a. a → a
+
+---
+
+(source_file
+  (module
+    (semi)
+    (qname
+      (identifier))
+    (semi)
+    (recordDecl
+      (recordName)
+      (identifier)
+      (start)
+      (semi)
+      (identifier)
+      (semi)
+      (sigDecl
+        (identifier)
+        (forall
+          (identifier)
+          (term
+            (identifier))
+          (term
+            (identifier))))
+      (end))))

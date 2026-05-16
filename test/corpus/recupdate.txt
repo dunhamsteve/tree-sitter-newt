@@ -1,0 +1,31 @@
+===
+Record Update
+===
+module Foo
+
+blah = setMetaContext $ {metas $= updateMap ix me; autos := autos} mc
+---
+
+(source_file
+  (module
+    (semi)
+    (qname
+      (identifier))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier))
+      (term
+        (identifier)
+        (dollar
+          (term
+            (recUpdate
+              (identifier)
+              (term
+                (identifier)
+                (identifier)
+                (identifier))
+              (identifier)
+              (term
+                (identifier)))
+            (identifier)))))))

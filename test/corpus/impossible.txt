@@ -1,0 +1,63 @@
+=====
+impossible clauses
+=====
+module Data.Vect
+
+vindex : ∀ n a. Fin n → Vect n a → a
+vindex FZ (x :- _) = x
+vindex (FS k) (x :- rest) = vindex k rest
+vindex () VNil
+---
+
+(source_file
+  (module
+    (semi)
+    (qname
+      (identifier)
+      (identifier))
+    (semi)
+    (sigDecl
+      (identifier)
+      (forall
+        (identifier)
+        (identifier)
+        (term
+          (identifier)
+          (identifier))
+        (term
+          (identifier)
+          (identifier)
+          (identifier))
+        (term
+          (identifier))))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier)
+        (identifier)
+        (term
+          (identifier)
+          (identifier)
+          (identifier)))
+      (term
+        (identifier)))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier)
+        (term
+          (identifier)
+          (identifier))
+        (term
+          (identifier)
+          (identifier)
+          (identifier)))
+      (term
+        (identifier)
+        (identifier)
+        (identifier)))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier)
+        (identifier)))))

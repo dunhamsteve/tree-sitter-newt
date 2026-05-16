@@ -44,6 +44,11 @@ module.exports = grammar({
       ),
     _arr: _ => choice("->", "→"),
     number: $ => /\d+/,
+    lamCaseExpr: $ => seq(
+      choice("\\", "λ"),
+      "case",
+      layout($, $.caseAlt)
+    ),
     lamExpr: $ => seq(
       choice("\\", "λ"),
       repeat1($.identifier),
@@ -52,9 +57,10 @@ module.exports = grammar({
     ),
     // hole, parenTypeExpression, record update
     proj: $ => /[.][A-z0-9]/,
-    _atom: $ => choice(seq($.identifier, optional(seq("@", "(", $._typeExpr, ")"))), $.proj, $.string, $.character, $.number, $.recUpdate, seq("(", optional($._typeExpr), ")")),
+    _atom: $ => choice(seq($.identifier, optional(seq("@", "(", $._typeExpr, ")"))), $.proj, $.string, $.character, $.number, $.recUpdate, $.listLiteral, seq("(", optional($._typeExpr), ")")),
     _parg: $ => choice(seq("{{", $._typeExpr, "}}"), seq("{", $._typeExpr, "}"), $._atom),
-    recUpdate: $ => seq("[", sep(";", seq($.identifier, choice(":=", "$="), $.term)), "]"),
+    recUpdate: $ => seq("{", sep(";", seq($.identifier, choice(":=", "$="), $.term)), "}"),
+    listLiteral: $ => seq("[", sep(",", $._typeExpr),"]"),
     _appExpr: $ => seq($._atom, repeat($._parg)),
     qname: ($) => sep1(".", $.identifier),
     // TODO handle string interpolation, we'd need heavy lifting from the scanner
@@ -103,7 +109,7 @@ module.exports = grammar({
         $.caseExpr,
         $.caseLet,
         $.letStmt,
-        // caseLamExpr
+        $.lamCaseExpr,
         $.lamExpr,
         $.doBlock,
         $.ifThen,
@@ -229,6 +235,6 @@ module.exports = grammar({
     // Don't think we need this at this point.
 
     // adding "," here does all sorts of harm...
-    identifier: ($) => /_,_|,|([^()\\{}\[\],.@;\s ])[^()\\{}\[\],.@;\s ]*/,
+    identifier: ($) => /_,_|,|([^`()\\{}\[\],.@;\s ])[^`()\\{}\[\],.@;\s ]*/,
   },
 });

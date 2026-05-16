@@ -1,0 +1,76 @@
+=====
+case let
+=====
+module Foo
+
+instance Applicative IO where
+  pure a = \ w => MkIORes a w
+  f <*> a = \ w =>
+    let (MkIORes f w) = f w in
+    let (MkIORes a w) = a w in
+    MkIORes (f a) w
+---
+
+(source_file
+  (module
+    (semi)
+    (qname
+      (identifier))
+    (semi)
+    (instanceDecl
+      (term
+        (identifier)
+        (identifier))
+      (start)
+      (semi)
+      (defDecl
+        (lhs
+          (identifier)
+          (identifier))
+        (term
+          (lamExpr
+            (identifier)
+            (term
+              (identifier)
+              (identifier)
+              (identifier)))))
+      (semi)
+      (defDecl
+        (lhs
+          (identifier)
+          (identifier)
+          (identifier))
+        (term
+          (lamExpr
+            (identifier)
+            (term
+              (caseLet
+                (start)
+                (semi)
+                (term
+                  (identifier)
+                  (identifier)
+                  (identifier))
+                (term
+                  (identifier)
+                  (identifier))
+                (end)
+                (term
+                  (caseLet
+                    (start)
+                    (semi)
+                    (term
+                      (identifier)
+                      (identifier)
+                      (identifier))
+                    (term
+                      (identifier)
+                      (identifier))
+                    (end)
+                    (term
+                      (identifier)
+                      (term
+                        (identifier)
+                        (identifier))
+                      (identifier)))))))))
+      (end))))
