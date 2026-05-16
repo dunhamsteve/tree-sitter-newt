@@ -155,11 +155,23 @@
           "named": true
         },
         {
+          "type": "end",
+          "named": true
+        },
+        {
           "type": "forall",
           "named": true
         },
         {
           "type": "orAlt",
+          "named": true
+        },
+        {
+          "type": "semi",
+          "named": true
+        },
+        {
+          "type": "start",
           "named": true
         },
         {
@@ -654,7 +666,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "binders",
@@ -1027,7 +1039,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "binders",
@@ -1294,11 +1306,11 @@
   },
   {
     "type": "name",
-    "named": true
+    "named": false
   },
   {
     "type": "name",
-    "named": false
+    "named": true
   },
   {
     "type": "number",

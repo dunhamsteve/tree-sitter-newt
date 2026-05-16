@@ -109,7 +109,7 @@ bool tree_sitter_newt_external_scanner_scan(State *state, TSLexer *lexer,
   // Also, "in" gives us an end, if we're in a position to accept one.
   // We may need to pop a few levels and when we are able to accept an "in"
   // we won't be accepting a VIRT_END
-  if (col < cur || isAtIn(lexer) && syms[VIRT_END] && state->len > 1) {
+  if (col < cur || (lexer->eof(lexer) || isAtIn(lexer)) && syms[VIRT_END] && state->len > 1) {
     fprintf(stderr, "end [%d %d %d %d] %d %d\n", syms[0], syms[1], syms[2],
             syms[3], col, cur);
     pop(state);

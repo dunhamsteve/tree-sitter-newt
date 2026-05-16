@@ -52,7 +52,7 @@ module.exports = grammar({
     ),
     // hole, parenTypeExpression, record update
     proj: $ => /[.][A-z0-9]/,
-    _atom: $ => choice(seq($.identifier, optional(seq("@", "(", $._typeExpr, ")"))), $.proj, $.string, $.character, $.number, $.recUpdate, seq("(", $._typeExpr, ")")),
+    _atom: $ => choice(seq($.identifier, optional(seq("@", "(", $._typeExpr, ")"))), $.proj, $.string, $.character, $.number, $.recUpdate, seq("(", optional($._typeExpr), ")")),
     _parg: $ => choice(seq("{{", $._typeExpr, "}}"), seq("{", $._typeExpr, "}"), $._atom),
     recUpdate: $ => seq("[", sep(";", seq($.identifier, choice(":=", "$="), $.term)), "]"),
     _appExpr: $ => seq($._atom, repeat($._parg)),
@@ -90,8 +90,7 @@ module.exports = grammar({
       layout($, choice($.caseAlt, $.whereClause)),
     ),
     caseLet: $ => seq(
-      // what do we do with "in" - it makes an end without a start...
-      "let", "(", $._typeExpr, ")", "=", $._typeExpr, repeat($.orAlt), "in"
+      "let", $.start, $.semi, "(", $._typeExpr, ")", "=", $._typeExpr, repeat($.orAlt), $.end, "in", $._typeExpr
     ),
     letAssign: $ => seq($.identifier, "=", $._typeExpr),
     letStmt: $ => seq(
@@ -138,7 +137,8 @@ module.exports = grammar({
     aliasDecl: ($) => seq("alias", $.identifier, repeat($._telescope), "=", $._typeExpr),
     sigDecl: ($) => seq($.identifier, ":", $._typeExpr),
     whereClause: $ => seq("where", layout($, choice($.sigDecl, $.defDecl))),
-    defDecl: ($) => seq(alias($._appExpr, $.lhs), "=", $._typeExpr, optional($.whereClause)),
+    // impossible clauses don't have `=`
+    defDecl: ($) => seq(alias($._appExpr, $.lhs), optional(seq("=", $._typeExpr)), optional($.whereClause)),
     shortDataDecl: $ => seq(
       "data",
       alias($.identifier, "typeName"),
