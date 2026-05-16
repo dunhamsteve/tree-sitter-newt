@@ -134,6 +134,10 @@
         {
           "type": "term",
           "named": true
+        },
+        {
+          "type": "whereClause",
+          "named": true
         }
       ]
     }
@@ -346,6 +350,10 @@
         },
         {
           "type": "start",
+          "named": true
+        },
+        {
+          "type": "whereClause",
           "named": true
         }
       ]
@@ -735,10 +743,6 @@
           "named": true
         },
         {
-          "type": "identifier",
-          "named": true
-        },
-        {
           "type": "importDef",
           "named": true
         },
@@ -756,6 +760,10 @@
         },
         {
           "type": "ptypeDecl",
+          "named": true
+        },
+        {
+          "type": "qname",
           "named": true
         },
         {

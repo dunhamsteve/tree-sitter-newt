@@ -34,7 +34,7 @@
               },
               {
                 "type": "PATTERN",
-                "value": "([^-]|-+[^/])-"
+                "value": "[^-]*-+([^/-][^-]*-+)*"
               },
               {
                 "type": "STRING",
@@ -558,6 +558,10 @@
         {
           "type": "SYMBOL",
           "name": "doArrow"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "whereClause"
         }
       ]
     },
@@ -660,8 +664,17 @@
                     "name": "semi"
                   },
                   {
-                    "type": "SYMBOL",
-                    "name": "caseAlt"
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "SYMBOL",
+                        "name": "caseAlt"
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "whereClause"
+                      }
+                    ]
                   }
                 ]
               }
@@ -1074,8 +1087,11 @@
           "name": "identifier"
         },
         {
-          "type": "SYMBOL",
-          "name": "_telescope"
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_telescope"
+          }
         },
         {
           "type": "STRING",
@@ -1576,16 +1592,11 @@
               "value": "recordName"
             },
             {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "_telescope"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
+              "type": "REPEAT",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_telescope"
+              }
             }
           ]
         },
@@ -1662,16 +1673,11 @@
               "value": "className"
             },
             {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "_telescope"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
+              "type": "REPEAT",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_telescope"
+              }
             }
           ]
         },
@@ -1843,7 +1849,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "identifier"
+          "name": "qname"
         },
         {
           "type": "REPEAT",

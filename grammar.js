@@ -35,8 +35,11 @@ module.exports = grammar({
       token(
         choice(
           seq("--", /.*/),
-          // FIXME comments /- -/ are nested, which needs to be done in scanner.c
-          seq("/-", /([^-]|-+[^/])-/, "/"),
+          seq(
+            '/-',
+            /[^-]*-+([^/-][^-]*-+)*/,
+            '/',
+          ),
         ),
       ),
     _arr: _ => choice("->", "→"),
@@ -49,7 +52,7 @@ module.exports = grammar({
     ),
     // hole, parenTypeExpression, record update
     proj: $ => /[.][A-z0-9]/,
-    _atom: $ => choice(seq($.identifier,optional(seq("@","(",$._typeExpr,")"))), $.proj, $.string, $.character, $.number, $.recUpdate, seq("(", $._typeExpr, ")")),
+    _atom: $ => choice(seq($.identifier, optional(seq("@", "(", $._typeExpr, ")"))), $.proj, $.string, $.character, $.number, $.recUpdate, seq("(", $._typeExpr, ")")),
     _parg: $ => choice(seq("{{", $._typeExpr, "}}"), seq("{", $._typeExpr, "}"), $._atom),
     recUpdate: $ => seq("[", sep(";", seq($.identifier, choice(":=", "$="), $.term)), "]"),
     _appExpr: $ => seq($._atom, repeat($._parg)),
@@ -72,7 +75,10 @@ module.exports = grammar({
     _doExpr: $ => choice(
       $.doCaseLet,
       $.doLet,
-      $.doArrow
+      $.doArrow,
+      // HACK - if the where is the same level as `do`, we're not ending the do
+      // We can't really say "where ends everything", so we pretend it's a do clause
+      $.whereClause,
     ),
     doBlock: $ => seq("do", layout($, $._doExpr)),
     ifThen: ($) => seq("if", $.term, "then", $.term, "else", $.term),
@@ -80,16 +86,17 @@ module.exports = grammar({
       "case",
       $._typeExpr,
       "of",
-      layout($,$.caseAlt)
+      // HACK where clause at level of case alt
+      layout($, choice($.caseAlt, $.whereClause)),
     ),
     caseLet: $ => seq(
       // what do we do with "in" - it makes an end without a start...
-      "let", "(", $._typeExpr,")","=",$._typeExpr, repeat($.orAlt),"in"
+      "let", "(", $._typeExpr, ")", "=", $._typeExpr, repeat($.orAlt), "in"
     ),
     letAssign: $ => seq($.identifier, "=", $._typeExpr),
     letStmt: $ => seq(
       "let",
-      layout($,$.letAssign),
+      layout($, $.letAssign),
       "in",
       $._typeExpr),
     _term2: ($) =>
@@ -128,7 +135,7 @@ module.exports = grammar({
     //     repeat(seq(repeat1(choice($.identifier, $.binder)), $._arr)),
     //     $.identifier,
     //   ),
-    aliasDecl: ($) => seq("alias", $.identifier, $._telescope, "=", $._typeExpr),
+    aliasDecl: ($) => seq("alias", $.identifier, repeat($._telescope), "=", $._typeExpr),
     sigDecl: ($) => seq($.identifier, ":", $._typeExpr),
     whereClause: $ => seq("where", layout($, choice($.sigDecl, $.defDecl))),
     defDecl: ($) => seq(alias($._appExpr, $.lhs), "=", $._typeExpr, optional($.whereClause)),
@@ -175,14 +182,14 @@ module.exports = grammar({
     recordDecl: $ =>
       seq(
         "record",
-        seq(alias($.identifier, $.recordName), optional($._telescope)),
+        seq(alias($.identifier, $.recordName), repeat($._telescope)),
         "where",
         layout($, choice(seq("constructor", $.identifier), $.sigDecl)),
       ),
     classDecl: $ =>
       seq(
         "class",
-        seq(alias($.identifier, $.className), optional($._telescope)),
+        seq(alias($.identifier, $.className), repeat($._telescope)),
         "where",
         layout($, $.sigDecl)
       ),
@@ -213,7 +220,7 @@ module.exports = grammar({
       seq(
         optional($.semi),
         "module",
-        $.identifier,
+        $.qname,
         repeat(seq($.semi, $.importDef)),
         repeat(seq($.semi, $._decl)),
       ),
