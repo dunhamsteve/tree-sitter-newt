@@ -83,6 +83,19 @@ module.exports = grammar({
     // This should be close enough for interps with no strings inside
     string: _ => /"([^"]|\\.)*"/,
     character: _ => /'(\\)?.'/,
+    // string: ($) =>
+    //   seq(
+    //     // HACK "--blah" gets picked up as a comment unless consumed here
+    //     // we still have a case, right after the } that is an issue
+    //     /"([^\\"\n]|\\[^{])+/,
+    //     repeat(
+    //       choice(
+    //         /([^\\"\n]|\\[^{])+/,
+    //         seq("\\{", alias($._typeExpr, $.interpolation), "}"),
+    //       ),
+    //     ),
+    //     '"',
+    //   ),
     // This is unfortunate, we have a conflict with `let` and the $.start pushes it over the other way if we don't have one here.
     // It will break `let x = case y of ...` when the ... is indented less than the x.  Unless I relax end..
     doLet: $ => seq("let", seq($.start, repeat(seq($.semi, $.letAssign)), $.end)),
