@@ -9,6 +9,7 @@ instance Applicative IO where
     let (MkIORes f w) = f w in
     let (MkIORes a w) = a w in
     MkIORes (f a) w
+
 ---
 
 (source_file
@@ -21,6 +22,7 @@ instance Applicative IO where
       (term
         (identifier)
         (identifier))
+      (where)
       (start)
       (semi)
       (defDecl

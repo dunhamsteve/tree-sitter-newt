@@ -1,0 +1,121 @@
+======
+Let statements
+======
+module Test
+
+blah = let x = 1 in x
+blah = let x = 1
+           y = 2 in x
+blah = let x = 1
+           y = 2
+	   in x
+blah = let x = 1
+           y = 2
+	       in x
+blah = let (Just x) = 1
+               | Nothing => 2
+   in x
+---
+
+(source_file
+  (module
+    (semi)
+    (qname
+      (identifier))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier))
+      (term
+        (letStmt
+          (start)
+          (semi)
+          (letAssign
+            (identifier)
+            (term
+              (number)))
+          (end)
+          (term
+            (identifier)))))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier))
+      (term
+        (letStmt
+          (start)
+          (semi)
+          (letAssign
+            (identifier)
+            (term
+              (number)))
+          (semi)
+          (letAssign
+            (identifier)
+            (term
+              (number)))
+          (end)
+          (term
+            (identifier)))))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier))
+      (term
+        (letStmt
+          (start)
+          (semi)
+          (letAssign
+            (identifier)
+            (term
+              (number)))
+          (semi)
+          (letAssign
+            (identifier)
+            (term
+              (number)))
+          (end)
+          (term
+            (identifier)))))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier))
+      (term
+        (letStmt
+          (start)
+          (semi)
+          (letAssign
+            (identifier)
+            (term
+              (number)))
+          (semi)
+          (letAssign
+            (identifier)
+            (term
+              (number)))
+          (end)
+          (term
+            (identifier)))))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier))
+      (term
+        (caseLet
+          (start)
+          (semi)
+          (term
+            (identifier)
+            (identifier))
+          (term
+            (number))
+          (orAlt
+            (caseAlt
+              (term
+                (identifier))
+              (term
+                (number))))
+          (end)
+          (term
+            (identifier)))))))

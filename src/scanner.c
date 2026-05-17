@@ -20,6 +20,8 @@ enum TokenType {
   VIRT_SEMI,
   VIRT_END,
   WHITESPACE,
+  WHERE,
+  EVERYTHING,
 };
 
 static void ensure(State *state, uint32_t count) {
@@ -66,6 +68,16 @@ static bool isAtInOrParen(TSLexer *lexer) {
     return PEEK_WS;
 }
 
+static bool isAtWhere(TSLexer *lexer) {
+    if (PEEK != 'w') return false;
+    lexer->mark_end(lexer);
+    lexer->advance(lexer,false); if (PEEK != 'h') return false;
+    lexer->advance(lexer,false); if (PEEK != 'e') return false;
+    lexer->advance(lexer,false); if (PEEK != 'r') return false;
+    lexer->advance(lexer,false); if (PEEK != 'e') return false;
+    lexer->advance(lexer,false); return PEEK_WS;
+}
+
 /**
  * The custom scanner is responsible for the virtual indent, outdent, and semi tokens.
  * Additionally it handles whitespace. This allows us to give the virtual tokens priority over
@@ -93,11 +105,17 @@ bool tree_sitter_newt_external_scanner_scan(State *state, TSLexer *lexer,
     return false;
   }
 
+
   int32_t cur = peek(state);
   uint32_t col = lexer->get_column(lexer);
+  bool isEOF = lexer->eof(lexer);
+
+  // has to happen after we get the column and after we get isEOF
+  bool atWhere = isAtWhere(lexer);
+
   // START must indent more
   // We have `ws` so we make forward progress
-  if (ws && syms[VIRT_START] && cur < col) {
+  if (ws && syms[VIRT_START] && cur < col && !syms[EVERYTHING]) {
     fprintf(stderr, "start [%d %d %d %d] %d %d\n", syms[0], syms[1], syms[2],
             syms[3], col, cur);
     push(state, col);
@@ -111,7 +129,9 @@ bool tree_sitter_newt_external_scanner_scan(State *state, TSLexer *lexer,
   // Also, "in" gives us an end, if we're in a position to accept one.
   // We may need to pop a few levels and when we are able to accept an "in"
   // we won't be accepting a VIRT_END
-  if (col < cur || (lexer->eof(lexer) || isAtInOrParen(lexer)) && syms[VIRT_END] && state->len > 1) {
+  //
+  // "where" gives us an end if we're not expecting a where.
+  if (col < cur || (isEOF || isAtInOrParen(lexer) || atWhere && ! syms[WHERE]) && syms[VIRT_END] && state->len > 1) {
     fprintf(stderr, "end [%d %d %d %d] %d %d\n", syms[0], syms[1], syms[2],
             syms[3], col, cur);
     pop(state);

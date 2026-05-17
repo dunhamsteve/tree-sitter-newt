@@ -216,6 +216,10 @@
         {
           "type": "start",
           "named": true
+        },
+        {
+          "type": "where",
+          "named": true
         }
       ]
     }
@@ -254,6 +258,10 @@
         },
         {
           "type": "term",
+          "named": true
+        },
+        {
+          "type": "where",
           "named": true
         }
       ]
@@ -532,6 +540,10 @@
         },
         {
           "type": "term",
+          "named": true
+        },
+        {
+          "type": "where",
           "named": true
         }
       ]
@@ -978,6 +990,10 @@
         {
           "type": "start",
           "named": true
+        },
+        {
+          "type": "where",
+          "named": true
         }
       ]
     }
@@ -1181,6 +1197,10 @@
         },
         {
           "type": "start",
+          "named": true
+        },
+        {
+          "type": "where",
           "named": true
         }
       ]
@@ -1421,7 +1441,7 @@
   },
   {
     "type": "where",
-    "named": false
+    "named": true
   },
   {
     "type": "{",

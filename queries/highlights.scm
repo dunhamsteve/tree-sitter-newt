@@ -1,7 +1,8 @@
 [
   "let"
-  ; "in"
-  "where"
+  "in"
+  ; "where"
+  (where)
   "case"  "of"
   "data"
   ;"U"

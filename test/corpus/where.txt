@@ -1,0 +1,114 @@
+===
+where ends blocks
+===
+module WhereIssue
+
+import Prelude
+
+main : IO Unit
+main = do
+  putStrLn blah
+  -- case 1 of
+  --   _ => putStrLn blah
+   where
+      blah : String
+      blah = "woot"
+
+main2 : IO Unit
+main2 = do
+  case 1 of
+      _ => putStrLn blah
+   where
+    blah : String
+    blah = "woot"
+---
+
+(source_file
+  (module
+    (semi)
+    (qname
+      (identifier))
+    (semi)
+    (importDef
+      (qname
+        (identifier)))
+    (semi)
+    (sigDecl
+      (identifier)
+      (term
+        (identifier)
+        (identifier)))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier))
+      (term
+        (doBlock
+          (start)
+          (semi)
+          (doArrow
+            (term
+              (identifier)
+              (identifier)))
+          (comment)
+          (comment)
+          (end)))
+      (whereClause
+        (where)
+        (start)
+        (semi)
+        (sigDecl
+          (identifier)
+          (term
+            (identifier)))
+        (semi)
+        (defDecl
+          (lhs
+            (identifier))
+          (term
+            (string)))
+        (end)))
+    (semi)
+    (sigDecl
+      (identifier)
+      (term
+        (identifier)
+        (identifier)))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier))
+      (term
+        (doBlock
+          (start)
+          (semi)
+          (doArrow
+            (term
+              (caseExpr
+                (term
+                  (number))
+                (start)
+                (semi)
+                (caseAlt
+                  (term
+                    (identifier))
+                  (term
+                    (identifier)
+                    (identifier)))
+                (end))))
+          (end)))
+      (whereClause
+        (where)
+        (start)
+        (semi)
+        (sigDecl
+          (identifier)
+          (term
+            (identifier)))
+        (semi)
+        (defDecl
+          (lhs
+            (identifier))
+          (term
+            (string)))
+        (end)))))

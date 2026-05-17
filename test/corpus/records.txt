@@ -18,6 +18,7 @@ record Foo a where
     (recordDecl
       (recordName)
       (identifier)
+      (where)
       (start)
       (semi)
       (identifier)

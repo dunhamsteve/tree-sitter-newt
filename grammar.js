@@ -43,7 +43,7 @@ module.exports = grammar({
       "data",
     ],
   },
-  externals: ($) => [$.start, $.semi, $.end, $._ws, $.everything],
+  externals: ($) => [$.start, $.semi, $.end, $._ws, $.where, $.everything],
   rules: {
     // TODO: add the actual grammar rules
     source_file: ($) => $.module,
@@ -147,8 +147,8 @@ module.exports = grammar({
     _typeExpr: ($) => prec.right(choice($.forall, $.binders, seq($.term, optional(seq($._arr, $._typeExpr))))),
     aliasDecl: ($) => seq("alias", $.identifier, repeat($._telescope), "=", $._typeExpr),
     sigDecl: ($) => seq($.identifier, ":", $._typeExpr),
-    _where: $ => "where",
-    whereClause: $ => seq($._where, layout($, choice($.sigDecl, $.defDecl))),
+    where: $ => "where",
+    whereClause: $ => seq($.where, layout($, choice($.sigDecl, $.defDecl))),
     // impossible clauses don't have `=`
     defDecl: ($) => seq(alias($._appExpr, $.lhs), optional(seq("=", $._typeExpr)), optional($.whereClause)),
     shortDataDecl: $ => seq(
@@ -166,7 +166,7 @@ module.exports = grammar({
         $._typeExpr,
         // the layout here can be empty (so no start tag)
         // optional doesn't seem to help, so we have an error at void
-        optional(seq("where", optional(layout($, $.sigDecl)))),
+        optional(seq($.where, optional(layout($, $.sigDecl)))),
       ),
     jsLitString: $ => seq("`", alias(/[^`]+/, $.jsStringFragment), "`"),
     deriveDecl: $ => seq("derive", repeat1($.identifier)),
@@ -195,20 +195,20 @@ module.exports = grammar({
       seq(
         "record",
         seq(alias($.identifier, $.recordName), repeat($._telescope)),
-        "where",
+        $.where,
         layout($, choice(seq("constructor", $.identifier), $.sigDecl)),
       ),
     classDecl: $ =>
       seq(
         "class",
         seq(alias($.identifier, $.className), repeat($._telescope)),
-        "where",
+        $.where,
         layout($, $.sigDecl)
       ),
     instanceDecl: $ => seq(
       "instance",
       $._typeExpr,
-      optional(seq("where", layout($, choice($.sigDecl, $.defDecl))))
+      optional(seq($.where, layout($, choice($.sigDecl, $.defDecl))))
     ),
     _decl: ($) =>
       choice(

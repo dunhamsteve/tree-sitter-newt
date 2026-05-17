@@ -1244,7 +1244,7 @@
         }
       ]
     },
-    "_where": {
+    "where": {
       "type": "STRING",
       "value": "where"
     },
@@ -1253,7 +1253,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "_where"
+          "name": "where"
         },
         {
           "type": "SEQ",
@@ -1461,8 +1461,8 @@
               "type": "SEQ",
               "members": [
                 {
-                  "type": "STRING",
-                  "value": "where"
+                  "type": "SYMBOL",
+                  "name": "where"
                 },
                 {
                   "type": "CHOICE",
@@ -1742,8 +1742,8 @@
           ]
         },
         {
-          "type": "STRING",
-          "value": "where"
+          "type": "SYMBOL",
+          "name": "where"
         },
         {
           "type": "SEQ",
@@ -1823,8 +1823,8 @@
           ]
         },
         {
-          "type": "STRING",
-          "value": "where"
+          "type": "SYMBOL",
+          "name": "where"
         },
         {
           "type": "SEQ",
@@ -1875,8 +1875,8 @@
               "type": "SEQ",
               "members": [
                 {
-                  "type": "STRING",
-                  "value": "where"
+                  "type": "SYMBOL",
+                  "name": "where"
                 },
                 {
                   "type": "SEQ",
@@ -2075,7 +2075,7 @@
     },
     {
       "type": "SYMBOL",
-      "name": "whereis"
+      "name": "where"
     },
     {
       "type": "SYMBOL",
