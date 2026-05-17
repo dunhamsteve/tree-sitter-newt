@@ -1,0 +1,35 @@
+===
+Do block ended by paren
+===
+module Foo
+
+foo = blah (do
+   foo bar
+   blah) arg
+---
+
+(source_file
+  (module
+    (semi)
+    (qname
+      (identifier))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier))
+      (term
+        (identifier)
+        (term
+          (doBlock
+            (start)
+            (semi)
+            (doArrow
+              (term
+                (identifier)
+                (identifier)))
+            (semi)
+            (doArrow
+              (term
+                (identifier)))
+            (end)))
+        (identifier)))))

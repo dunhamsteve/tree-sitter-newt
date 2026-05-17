@@ -23,7 +23,9 @@ const layout = (
 ) => seq($.start, repeat(seq($.semi, rule)), $.end)
 
 
-// *** LSP.newt line 182 is treating where as an identifier
+// Something weird going on in LSP.newt, maybe two ends in a row?
+// Consider having a special token for the top level SEMI to help
+// sync things up after an error
 
 module.exports = grammar({
   name: "newt",
@@ -41,7 +43,7 @@ module.exports = grammar({
       "data",
     ],
   },
-  externals: ($) => [$.start, $.semi, $.end, $._ws],
+  externals: ($) => [$.start, $.semi, $.end, $._ws, $.everything],
   rules: {
     // TODO: add the actual grammar rules
     source_file: ($) => $.module,
@@ -112,7 +114,7 @@ module.exports = grammar({
     caseLet: $ => seq(
       "let", $.start, $.semi, "(", $._typeExpr, ")", "=", $._typeExpr, repeat($.orAlt), $.end, "in", $._typeExpr
     ),
-    letAssign: $ => seq($.identifier, "=", $._typeExpr),
+    letAssign: $ => seq($.identifier, optional(seq(":", $._typeExpr)), "=", $._typeExpr),
     letStmt: $ => seq(
       "let",
       layout($, $.letAssign),
@@ -206,8 +208,7 @@ module.exports = grammar({
     instanceDecl: $ => seq(
       "instance",
       $._typeExpr,
-      "where",
-      layout($, choice($.sigDecl, $.defDecl))
+      optional(seq("where", layout($, choice($.sigDecl, $.defDecl))))
     ),
     _decl: ($) =>
       choice(
@@ -234,11 +235,6 @@ module.exports = grammar({
         repeat(seq($.semi, $.importDef)),
         repeat(seq($.semi, $._decl)),
       ),
-    // oof, sort this out.
-    // operator: ($) => /xxxx[∘!#$%&*+,./<=>?@^|-]+/,
-    // Don't think we need this at this point.
-
-    // adding "," here does all sorts of harm...
     identifier: ($) => /_,_|,|([^`()\\{}\[\],.@;\s ])[^`()\\{}\[\],.@;\s ]*/,
   },
 });

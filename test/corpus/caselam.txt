@@ -1,0 +1,58 @@
+===
+Case lambda
+===
+module Foo
+
+foo = \ case
+  Foo => 1
+  Bar => 2
+
+foo = \ case Foo => 1
+             Bar => 2
+---
+
+(source_file
+  (module
+    (semi)
+    (qname
+      (identifier))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier))
+      (term
+        (lamCaseExpr
+          (start)
+          (semi)
+          (caseAlt
+            (term
+              (identifier))
+            (term
+              (number)))
+          (semi)
+          (caseAlt
+            (term
+              (identifier))
+            (term
+              (number)))
+          (end))))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier))
+      (term
+        (lamCaseExpr
+          (start)
+          (semi)
+          (caseAlt
+            (term
+              (identifier))
+            (term
+              (number)))
+          (semi)
+          (caseAlt
+            (term
+              (identifier))
+            (term
+              (number)))
+          (end))))))

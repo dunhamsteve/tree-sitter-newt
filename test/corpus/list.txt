@@ -1,0 +1,30 @@
+===
+List sugar
+===
+module List
+
+foo = [ nm, nm ]
+foo = []
+---
+
+(source_file
+  (module
+    (semi)
+    (qname
+      (identifier))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier))
+      (term
+        (listLiteral
+          (term
+            (identifier))
+          (term
+            (identifier)))))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier))
+      (term
+        (listLiteral)))))
