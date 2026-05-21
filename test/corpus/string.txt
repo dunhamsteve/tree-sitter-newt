@@ -1,0 +1,132 @@
+===
+String interpolation
+===
+module String
+import Prelude
+
+foo : IO Unit
+foo = do
+  putStrLn "blah \{ joinBy "," ["one", "two"]}"
+  putStrLn "--foo"
+  putStrLn "\{"woo"}--foo"
+
+instance Show FC where
+  show (MkFC file (MkBounds l c el ec)) = "\{file}:\{show $ l + 1}:\{show $ c + 1}--\{show $ el + 1}:\{show $ ec + 1}"
+
+---
+
+(source_file
+  (module
+    (semi)
+    (qname
+      (identifier))
+    (semi)
+    (importDef
+      (qname
+        (identifier)))
+    (semi)
+    (sigDecl
+      (identifier)
+      (term
+        (identifier)
+        (identifier)))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier))
+      (term
+        (doBlock
+          (start)
+          (semi)
+          (doArrow
+            (term
+              (identifier)
+              (string
+                (frag)
+                (interpolation
+                  (term
+                    (identifier)
+                    (string
+                      (frag))
+                    (listLiteral
+                      (term
+                        (string
+                          (frag)))
+                      (term
+                        (string
+                          (frag))))))
+                (frag))))
+          (semi)
+          (doArrow
+            (term
+              (identifier)
+              (string
+                (frag))))
+          (semi)
+          (doArrow
+            (term
+              (identifier)
+              (string
+                (frag)
+                (interpolation
+                  (term
+                    (string
+                      (frag))))
+                (frag))))
+          (end))))
+    (semi)
+    (instanceDecl
+      (term
+        (identifier)
+        (identifier))
+      (where)
+      (start)
+      (semi)
+      (defDecl
+        (lhs
+          (identifier)
+          (term
+            (identifier)
+            (identifier)
+            (term
+              (identifier)
+              (identifier)
+              (identifier)
+              (identifier)
+              (identifier))))
+        (term
+          (string
+            (frag)
+            (interpolation
+              (term
+                (identifier)))
+            (frag)
+            (interpolation
+              (term
+                (identifier)
+                (identifier)
+                (identifier)
+                (number)))
+            (frag)
+            (interpolation
+              (term
+                (identifier)
+                (identifier)
+                (identifier)
+                (number)))
+            (frag)
+            (interpolation
+              (term
+                (identifier)
+                (identifier)
+                (identifier)
+                (number)))
+            (frag)
+            (interpolation
+              (term
+                (identifier)
+                (identifier)
+                (identifier)
+                (number)))
+            (frag))))
+      (end))))

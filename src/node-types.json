@@ -550,6 +550,29 @@
     }
   },
   {
+    "type": "interpolation",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binders",
+          "named": true
+        },
+        {
+          "type": "forall",
+          "named": true
+        },
+        {
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "jsLitString",
     "named": true,
     "fields": {},
@@ -1093,6 +1116,25 @@
     }
   },
   {
+    "type": "string",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "frag",
+          "named": true
+        },
+        {
+          "type": "interpolation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "term",
     "named": true,
     "fields": {},
@@ -1205,6 +1247,10 @@
         }
       ]
     }
+  },
+  {
+    "type": "\"",
+    "named": false
   },
   {
     "type": "$",
@@ -1336,6 +1382,10 @@
     "named": false
   },
   {
+    "type": "frag",
+    "named": true
+  },
+  {
     "type": "identifier",
     "named": true
   },
@@ -1421,10 +1471,6 @@
   },
   {
     "type": "start",
-    "named": true
-  },
-  {
-    "type": "string",
     "named": true
   },
   {

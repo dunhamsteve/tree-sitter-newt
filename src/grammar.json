@@ -462,13 +462,60 @@
         }
       ]
     },
-    "string": {
-      "type": "PATTERN",
-      "value": "\"([^\"]|\\\\.)*\""
-    },
     "character": {
       "type": "PATTERN",
       "value": "'(\\\\)?.'"
+    },
+    "string": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "IMMEDIATE_TOKEN",
+            "content": {
+              "type": "PATTERN",
+              "value": "\"([^\\\\\"\\n]|\\\\[^{])*"
+            }
+          },
+          "named": true,
+          "value": "frag"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "PATTERN",
+                "value": "\\\\\\{"
+              },
+              {
+                "type": "ALIAS",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_typeExpr"
+                },
+                "named": true,
+                "value": "interpolation"
+              },
+              {
+                "type": "ALIAS",
+                "content": {
+                  "type": "PATTERN",
+                  "value": "\\}([^\\\\\"\\n]|\\\\[^{])*"
+                },
+                "named": true,
+                "value": "frag"
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "\""
+        }
+      ]
     },
     "doLet": {
       "type": "SEQ",
@@ -2041,7 +2088,7 @@
     },
     "identifier": {
       "type": "PATTERN",
-      "value": "_,_|,|([^`()\\\\{}\\[\\],.@;\\s ])[^`()\\\\{}\\[\\],.@;\\s ]*"
+      "value": "_,_|,|([^\"`()\\\\{}\\[\\],.@;\\s ])[^\"`()\\\\{}\\[\\],.@;\\s ]*"
     }
   },
   "extras": [
@@ -2097,6 +2144,10 @@
       {
         "type": "STRING",
         "value": "case"
+      },
+      {
+        "type": "STRING",
+        "value": "let"
       },
       {
         "type": "STRING",

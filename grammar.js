@@ -3,7 +3,6 @@
  * @author Steve Dunham <dunhamsteve@gmail.com>
  * @license MIT
  *
- * I copied some unpublished code that I used years ago for pi-forall
  */
 
 /// <reference types="tree-sitter-cli/dsl" />
@@ -23,9 +22,10 @@ const layout = (
 ) => seq($.start, repeat(seq($.semi, rule)), $.end)
 
 
-// Something weird going on in LSP.newt, maybe two ends in a row?
-// Consider having a special token for the top level SEMI to help
-// sync things up after an error
+
+// - Consider having a special token for the top level SEMI to help
+//   sync things up after an error
+// - `let x = \n case` sees an outdent where newt doesn't.
 
 module.exports = grammar({
   name: "newt",
@@ -37,6 +37,7 @@ module.exports = grammar({
       "where",
       "in",
       "case",
+      "let",
       "instance",
       "record",
       "class",
@@ -76,26 +77,18 @@ module.exports = grammar({
     _atom: $ => choice(seq($.identifier, optional(seq("@", "(", $._typeExpr, ")"))), $.proj, $.string, $.character, $.number, $.recUpdate, $.listLiteral, seq("(", optional($._typeExpr), ")")),
     _parg: $ => choice(seq("{{", $._typeExpr, "}}"), seq("{", $._typeExpr, "}"), $._atom),
     recUpdate: $ => seq("{", sep(";", seq($.identifier, choice(":=", "$="), $.term)), "}"),
-    listLiteral: $ => seq("[", sep(",", $._typeExpr),"]"),
+    listLiteral: $ => seq("[", sep(",", $._typeExpr), "]"),
     _appExpr: $ => seq($._atom, repeat($._parg)),
     qname: ($) => sep1(".", $.identifier),
-    // TODO handle string interpolation, we'd need heavy lifting from the scanner
-    // This should be close enough for interps with no strings inside
-    string: _ => /"([^"]|\\.)*"/,
     character: _ => /'(\\)?.'/,
-    // string: ($) =>
-    //   seq(
-    //     // HACK "--blah" gets picked up as a comment unless consumed here
-    //     // we still have a case, right after the } that is an issue
-    //     /"([^\\"\n]|\\[^{])+/,
-    //     repeat(
-    //       choice(
-    //         /([^\\"\n]|\\[^{])+/,
-    //         seq("\\{", alias($._typeExpr, $.interpolation), "}"),
-    //       ),
-    //     ),
-    //     '"',
-    //   ),
+    string: ($) =>
+      seq(
+        // HACK "--blah" gets picked up as a comment unless consumed here
+        alias(token.immediate(/"([^\\"\n]|\\[^{])*/), $.frag),
+        // and again after the }
+        repeat(seq(/\\\{/, alias($._typeExpr, $.interpolation), alias(/\}([^\\"\n]|\\[^{])*/,$.frag))),
+        '"',
+      ),
     // This is unfortunate, we have a conflict with `let` and the $.start pushes it over the other way if we don't have one here.
     // It will break `let x = case y of ...` when the ... is indented less than the x.  Unless I relax end..
     doLet: $ => seq("let", seq($.start, repeat(seq($.semi, $.letAssign)), $.end)),
@@ -248,6 +241,6 @@ module.exports = grammar({
         repeat(seq($.semi, $.importDef)),
         repeat(seq($.semi, $._decl)),
       ),
-    identifier: ($) => /_,_|,|([^`()\\{}\[\],.@;\s ])[^`()\\{}\[\],.@;\s ]*/,
+    identifier: ($) => /_,_|,|([^"`()\\{}\[\],.@;\s ])[^"`()\\{}\[\],.@;\s ]*/,
   },
 });
