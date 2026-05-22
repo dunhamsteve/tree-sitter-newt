@@ -86,8 +86,8 @@ module.exports = grammar({
         // HACK "--blah" gets picked up as a comment unless consumed here
         alias(token.immediate(/"([^\\"\n]|\\[^{])*/), $.frag),
         // and again after the }
-        repeat(seq(/\\\{/, alias($._typeExpr, $.interpolation), alias(/\}([^\\"\n]|\\[^{])*/,$.frag))),
-        '"',
+        repeat(seq(alias(/\\\{/,$.frag), alias($._typeExpr, $.interpolation), alias(/\}([^\\"\n]|\\[^{])*/,$.frag))),
+        alias('"',$.frag),
       ),
     // This is unfortunate, we have a conflict with `let` and the $.start pushes it over the other way if we don't have one here.
     // It will break `let x = case y of ...` when the ... is indented less than the x.  Unless I relax end..

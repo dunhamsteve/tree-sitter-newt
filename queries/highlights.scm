@@ -19,5 +19,5 @@
   "|" "<-" "=>" "$" ":"
 ] @keyword
 (comment) @comment
-(string) @string
+(string (frag) @string)
 ;(jsLitString) @string

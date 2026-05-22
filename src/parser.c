@@ -194,9 +194,9 @@ static const char * const ts_symbol_names[] = {
   [anon_sym_DOT] = ".",
   [sym_character] = "character",
   [aux_sym_string_token1] = "frag",
-  [aux_sym_string_token2] = "string_token2",
+  [aux_sym_string_token2] = "frag",
   [aux_sym_string_token3] = "frag",
-  [anon_sym_DQUOTE] = "\"",
+  [anon_sym_DQUOTE] = "frag",
   [anon_sym_let] = "let",
   [anon_sym_EQ] = "=",
   [anon_sym_PIPE] = "|",
@@ -342,9 +342,9 @@ static const TSSymbol ts_symbol_map[] = {
   [anon_sym_DOT] = anon_sym_DOT,
   [sym_character] = sym_character,
   [aux_sym_string_token1] = aux_sym_string_token1,
-  [aux_sym_string_token2] = aux_sym_string_token2,
+  [aux_sym_string_token2] = aux_sym_string_token1,
   [aux_sym_string_token3] = aux_sym_string_token1,
-  [anon_sym_DQUOTE] = anon_sym_DQUOTE,
+  [anon_sym_DQUOTE] = aux_sym_string_token1,
   [anon_sym_let] = anon_sym_let,
   [anon_sym_EQ] = anon_sym_EQ,
   [anon_sym_PIPE] = anon_sym_PIPE,
@@ -572,8 +572,8 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .named = true,
   },
   [aux_sym_string_token2] = {
-    .visible = false,
-    .named = false,
+    .visible = true,
+    .named = true,
   },
   [aux_sym_string_token3] = {
     .visible = true,
@@ -581,7 +581,7 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
   },
   [anon_sym_DQUOTE] = {
     .visible = true,
-    .named = false,
+    .named = true,
   },
   [anon_sym_let] = {
     .visible = true,
