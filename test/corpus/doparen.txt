@@ -9,27 +9,26 @@ foo = blah (do
 ---
 
 (source_file
-  (module
-    (semi)
-    (qname
+  (semi)
+  (qname
+    (identifier))
+  (semi)
+  (defDecl
+    (lhs
       (identifier))
-    (semi)
-    (defDecl
-      (lhs
-        (identifier))
+    (term
+      (identifier)
       (term
-        (identifier)
-        (term
-          (doBlock
-            (start)
-            (semi)
-            (doArrow
-              (term
-                (identifier)
-                (identifier)))
-            (semi)
-            (doArrow
-              (term
-                (identifier)))
-            (end)))
-        (identifier)))))
+        (doBlock
+          (start)
+          (semi)
+          (doArrow
+            (term
+              (identifier)
+              (identifier)))
+          (semi)
+          (doArrow
+            (term
+              (identifier)))
+          (end)))
+      (identifier))))

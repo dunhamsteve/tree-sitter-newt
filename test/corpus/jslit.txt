@@ -10,20 +10,19 @@ pfunc foo uses (U) : U := `blah`
 ---
 
 (source_file
-  (module
-    (semi)
-    (qname
+  (semi)
+  (qname
+    (identifier))
+  (semi)
+  (pfuncDecl
+    (term
       (identifier))
-    (semi)
-    (pfuncDecl
-      (term
-        (identifier))
-      (jsLitString
-        (jsStringFragment)))
-    (semi)
-    (pfuncDecl
-      (identifier)
-      (term
-        (identifier))
-      (jsLitString
-        (jsStringFragment)))))
+    (jsLitString
+      (jsStringFragment)))
+  (semi)
+  (pfuncDecl
+    (identifier)
+    (term
+      (identifier))
+    (jsLitString
+      (jsStringFragment))))

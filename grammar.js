@@ -46,8 +46,12 @@ module.exports = grammar({
   },
   externals: ($) => [$.start, $.semi, $.end, $._ws, $.where, $.everything],
   rules: {
-    // TODO: add the actual grammar rules
-    source_file: ($) => $.module,
+    source_file: ($) =>
+      seq(
+        optional(seq($.semi, "module", $.qname)),
+        repeat(seq($.semi, $.importDef)),
+        repeat(seq($.semi, $._decl)),
+      ),
     comment: ($) =>
       token(
         choice(
@@ -233,14 +237,7 @@ module.exports = grammar({
         $.defDecl,
       ),
     colon: _ => ":",
-    module: ($) =>
-      seq(
-        optional($.semi),
-        "module",
-        $.qname,
-        repeat(seq($.semi, $.importDef)),
-        repeat(seq($.semi, $._decl)),
-      ),
     identifier: ($) => /_,_|,|([^"`()\\{}\[\],.@;\s ])[^"`()\\{}\[\],.@;\s ]*/,
+
   },
 });

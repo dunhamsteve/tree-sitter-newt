@@ -8,23 +8,22 @@ foo = []
 ---
 
 (source_file
-  (module
-    (semi)
-    (qname
+  (semi)
+  (qname
+    (identifier))
+  (semi)
+  (defDecl
+    (lhs
       (identifier))
-    (semi)
-    (defDecl
-      (lhs
-        (identifier))
-      (term
-        (listLiteral
-          (term
-            (identifier))
-          (term
-            (identifier)))))
-    (semi)
-    (defDecl
-      (lhs
-        (identifier))
-      (term
-        (listLiteral)))))
+    (term
+      (listLiteral
+        (term
+          (identifier))
+        (term
+          (identifier)))))
+  (semi)
+  (defDecl
+    (lhs
+      (identifier))
+    (term
+      (listLiteral))))

@@ -10,54 +10,53 @@ vindex () VNil
 ---
 
 (source_file
-  (module
-    (semi)
-    (qname
+  (semi)
+  (qname
+    (identifier)
+    (identifier))
+  (semi)
+  (sigDecl
+    (identifier)
+    (forall
       (identifier)
-      (identifier))
-    (semi)
-    (sigDecl
       (identifier)
-      (forall
-        (identifier)
-        (identifier)
-        (term
-          (identifier)
-          (identifier))
-        (term
-          (identifier)
-          (identifier)
-          (identifier))
-        (term
-          (identifier))))
-    (semi)
-    (defDecl
-      (lhs
-        (identifier)
-        (identifier)
-        (term
-          (identifier)
-          (identifier)
-          (identifier)))
       (term
-        (identifier)))
-    (semi)
-    (defDecl
-      (lhs
         (identifier)
-        (term
-          (identifier)
-          (identifier))
-        (term
-          (identifier)
-          (identifier)
-          (identifier)))
+        (identifier))
+      (term
+        (identifier)
+        (identifier)
+        (identifier))
+      (term
+        (identifier))))
+  (semi)
+  (defDecl
+    (lhs
+      (identifier)
+      (identifier)
       (term
         (identifier)
         (identifier)
         (identifier)))
-    (semi)
-    (defDecl
-      (lhs
+    (term
+      (identifier)))
+  (semi)
+  (defDecl
+    (lhs
+      (identifier)
+      (term
         (identifier)
-        (identifier)))))
+        (identifier))
+      (term
+        (identifier)
+        (identifier)
+        (identifier)))
+    (term
+      (identifier)
+      (identifier)
+      (identifier)))
+  (semi)
+  (defDecl
+    (lhs
+      (identifier)
+      (identifier))))

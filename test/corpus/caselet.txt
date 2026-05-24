@@ -13,66 +13,65 @@ instance Applicative IO where
 ---
 
 (source_file
-  (module
-    (semi)
-    (qname
+  (semi)
+  (qname
+    (identifier))
+  (semi)
+  (instanceDecl
+    (term
+      (identifier)
       (identifier))
+    (where)
+    (start)
     (semi)
-    (instanceDecl
-      (term
+    (defDecl
+      (lhs
         (identifier)
         (identifier))
-      (where)
-      (start)
-      (semi)
-      (defDecl
-        (lhs
+      (term
+        (lamExpr
           (identifier)
-          (identifier))
-        (term
-          (lamExpr
+          (term
             (identifier)
-            (term
-              (identifier)
-              (identifier)
-              (identifier)))))
-      (semi)
-      (defDecl
-        (lhs
-          (identifier)
-          (identifier)
-          (identifier))
-        (term
-          (lamExpr
             (identifier)
-            (term
-              (caseLet
-                (start)
-                (semi)
-                (term
-                  (identifier)
-                  (identifier)
-                  (identifier))
-                (term
-                  (identifier)
-                  (identifier))
-                (end)
-                (term
-                  (caseLet
-                    (start)
-                    (semi)
+            (identifier)))))
+    (semi)
+    (defDecl
+      (lhs
+        (identifier)
+        (identifier)
+        (identifier))
+      (term
+        (lamExpr
+          (identifier)
+          (term
+            (caseLet
+              (start)
+              (semi)
+              (term
+                (identifier)
+                (identifier)
+                (identifier))
+              (term
+                (identifier)
+                (identifier))
+              (end)
+              (term
+                (caseLet
+                  (start)
+                  (semi)
+                  (term
+                    (identifier)
+                    (identifier)
+                    (identifier))
+                  (term
+                    (identifier)
+                    (identifier))
+                  (end)
+                  (term
+                    (identifier)
                     (term
-                      (identifier)
                       (identifier)
                       (identifier))
-                    (term
-                      (identifier)
-                      (identifier))
-                    (end)
-                    (term
-                      (identifier)
-                      (term
-                        (identifier)
-                        (identifier))
-                      (identifier)))))))))
-      (end))))
+                    (identifier)))))))))
+    (end)))

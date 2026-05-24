@@ -10,25 +10,24 @@ record Foo a where
 ---
 
 (source_file
-  (module
+  (semi)
+  (qname
+    (identifier))
+  (semi)
+  (recordDecl
+    (recordName)
+    (identifier)
+    (where)
+    (start)
     (semi)
-    (qname
-      (identifier))
+    (identifier)
     (semi)
-    (recordDecl
-      (recordName)
+    (sigDecl
       (identifier)
-      (where)
-      (start)
-      (semi)
-      (identifier)
-      (semi)
-      (sigDecl
+      (forall
         (identifier)
-        (forall
-          (identifier)
-          (term
-            (identifier))
-          (term
-            (identifier))))
-      (end))))
+        (term
+          (identifier))
+        (term
+          (identifier))))
+    (end)))

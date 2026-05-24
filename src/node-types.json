@@ -801,77 +801,6 @@
     }
   },
   {
-    "type": "module",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "aliasDecl",
-          "named": true
-        },
-        {
-          "type": "classDecl",
-          "named": true
-        },
-        {
-          "type": "dataDecl",
-          "named": true
-        },
-        {
-          "type": "defDecl",
-          "named": true
-        },
-        {
-          "type": "deriveDecl",
-          "named": true
-        },
-        {
-          "type": "importDef",
-          "named": true
-        },
-        {
-          "type": "instanceDecl",
-          "named": true
-        },
-        {
-          "type": "mixfixDecl",
-          "named": true
-        },
-        {
-          "type": "pfuncDecl",
-          "named": true
-        },
-        {
-          "type": "ptypeDecl",
-          "named": true
-        },
-        {
-          "type": "qname",
-          "named": true
-        },
-        {
-          "type": "recordDecl",
-          "named": true
-        },
-        {
-          "type": "semi",
-          "named": true
-        },
-        {
-          "type": "shortDataDecl",
-          "named": true
-        },
-        {
-          "type": "sigDecl",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "orAlt",
     "named": true,
     "fields": {},
@@ -1105,11 +1034,67 @@
     "root": true,
     "fields": {},
     "children": {
-      "multiple": false,
-      "required": true,
+      "multiple": true,
+      "required": false,
       "types": [
         {
-          "type": "module",
+          "type": "aliasDecl",
+          "named": true
+        },
+        {
+          "type": "classDecl",
+          "named": true
+        },
+        {
+          "type": "dataDecl",
+          "named": true
+        },
+        {
+          "type": "defDecl",
+          "named": true
+        },
+        {
+          "type": "deriveDecl",
+          "named": true
+        },
+        {
+          "type": "importDef",
+          "named": true
+        },
+        {
+          "type": "instanceDecl",
+          "named": true
+        },
+        {
+          "type": "mixfixDecl",
+          "named": true
+        },
+        {
+          "type": "pfuncDecl",
+          "named": true
+        },
+        {
+          "type": "ptypeDecl",
+          "named": true
+        },
+        {
+          "type": "qname",
+          "named": true
+        },
+        {
+          "type": "recordDecl",
+          "named": true
+        },
+        {
+          "type": "semi",
+          "named": true
+        },
+        {
+          "type": "shortDataDecl",
+          "named": true
+        },
+        {
+          "type": "sigDecl",
           "named": true
         }
       ]
@@ -1423,11 +1408,11 @@
   },
   {
     "type": "name",
-    "named": false
+    "named": true
   },
   {
     "type": "name",
-    "named": true
+    "named": false
   },
   {
     "type": "number",

@@ -7,23 +7,22 @@ blah = setMetaContext $ {metas $= updateMap ix me; autos := autos} mc
 ---
 
 (source_file
-  (module
-    (semi)
-    (qname
+  (semi)
+  (qname
+    (identifier))
+  (semi)
+  (defDecl
+    (lhs
       (identifier))
-    (semi)
-    (defDecl
-      (lhs
-        (identifier))
-      (term
+    (term
+      (identifier)
+      (recUpdate
         (identifier)
-        (recUpdate
+        (term
           (identifier)
-          (term
-            (identifier)
-            (identifier)
-            (identifier))
           (identifier)
-          (term
-            (identifier)))
-        (identifier)))))
+          (identifier))
+        (identifier)
+        (term
+          (identifier)))
+      (identifier))))
